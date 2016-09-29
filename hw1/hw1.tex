@@ -64,8 +64,11 @@ Return $\max\limits_{1\leq k \leq N-1} (B[i] - C[i+1])$.
 The time complexity of the algorithm is $O(N)$.
 
 \section*{Problem 2}
-The algorithm works as following:
+The algorithm works as following: do a scan from left to right to the string, every time we find
+a unmatched right bracket, we change it into a left bracket. Assume that we have $2n$ unmatched 
+brackets remaining, we change the rightmost $n$ left brackets to right brackets. Then the string
+will be balanced.
 
 
-
+\section*{Problem 3}
 \end{document}
