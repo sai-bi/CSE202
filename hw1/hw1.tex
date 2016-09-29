@@ -1,0 +1,81 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+ \usepackage{tgtermes}
+
+ \usepackage[
+ pdftitle={Math Assignment},
+ pdfauthor={Joe Doe, Some University},
+ colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue,bookmarks=true,
+ bookmarksopenlevel=2]{hyperref}
+\usepackage{amsmath,amssymb,amsthm,textcomp}
+\usepackage{enumerate}
+\usepackage{multicol}
+\usepackage{tikz}
+
+\usepackage{geometry}
+\geometry{total={210mm,297mm},
+left=25mm,right=25mm,%
+bindingoffset=0mm, top=20mm,bottom=20mm}
+
+
+\linespread{1.3}
+
+\newcommand{\linia}{\rule{\linewidth}{0.5pt}}
+
+\providecommand{\myceil}[1]{\left \lceil #1 \right \rceil }
+% custom theorems if needed
+\newtheoremstyle{mytheor}
+    {1ex}{1ex}{\normalfont}{0pt}{\scshape}{.}{1ex}
+    {{\thmname{#1 }}{\thmnumber{#2}}{\thmnote{ (#3)}}}
+
+\theoremstyle{mytheor}
+\newtheorem{defi}{Definition}
+\usepackage[ruled, vlined, linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage[parfill]{parskip}
+% my own titles
+\makeatletter
+% \renewcommand{\maketitle}{
+% \begin{center}
+% \vspace{2ex}
+% {\huge \textsc{\@title}}
+% \vspace{1ex}
+% \\
+% \linia\\
+% \@author \hfill \@date
+% \vspace{4ex}
+% \end{center}
+% }
+% \makeatother
+%%%
+\setlength\parindent{0pt}
+% custom footers and headers
+\usepackage{fancyhdr,lastpage}
+\begin{document}
+
+\title{CSE 202: Design and Analysis of Algorithms}
+
+\author{Sai Bi}
+
+\date{\today}
+
+\maketitle
+
+\section*{Problem 1}
+Let $N$ be the length of the array $A$. The algorithm works as following:
+\begin{enumerate}
+\item
+Do a pass to the array and get the array $B$ where $B[i]=\max\limits_{1\leq k \leq i} A[k]$.
+\item 
+Do a pass to the array and get the array $C$ where $C[i]=\min\limits_{i\leq k \leq N} A[k]$.
+\item
+Return $\max\limits_{1\leq k \leq N-1} (B[i] - C[i+1])$.
+\end{enumerate}
+The time complexity of the algorithm is $O(N)$.
+
+\section*{Problem 2}
+
+\end{document}
