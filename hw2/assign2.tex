@@ -300,6 +300,32 @@ analyzed as following:
 \end{enumerate}
 Thus the time complexity is $O(n\log n)$.
 
+\subsection*{4}
+The product of two Toeplitz matrices can be calculated in $O(n^2)$ time.
 
-
+Let $A$ and $B$ be two $n\times n$ Toeplitz matrices, and $T = AB$. 
+\begin{enumerate}
+  \item We calculate the first row and first column of $T$. To calculate the
+    first column, we multiply $A$ by first column of $B$, which is $O(n\log n)$.
+    To calculate the first row, we multiply the first row of $A$ by $B$, which
+    is also $O(n\log n)$.
+  \item For remaining entries $T_{i,j}$ in $T$, each of them can be calculated in constant 
+    time from $T_{i-1, j-1}$. The proof is as following:
+      \begin{align}
+        \begin{split}
+          T_{i-1, j-1} &= \sum_{k=1}^{n} A_{i-1, k} B_{k,j-1} \\
+          T_{i, j} &= \sum_{k=1}^{n} A_{i, k} B_{k, j} \\
+                &= A_{i,1}B_{1,j} + \sum_{k=2}^{n} A_{i, k} B_{k, j} \\
+                &= A_{i,1}B_{1,j} + \sum_{k=2}^n A_{i-1, k-1} B_{k-1, j-1} \\
+                &= A_{i,1}B_{1,j} + \sum_{k=1}^n A_{i-1, k} B_{k-1, k} -
+                A_{i-1, n}B_{n,j} \\
+                &= T_{i-1, j-1} + A_{i,1}B_{1,j} - A_{i-1, n}B_{n,j} \\
+        \end{split}
+      \end{align}
+    Therefore, $T_{i, j}$ can be calculated in constant time from $T_{i-1,j-1}$.
+    Given this, we know that all remaining entries can be calculated in $O(n^2)$
+    time.
+\end{enumerate}
+That is, the time complexity of the proposed algorithm for multiplying two
+Toeplitz matrices is $O(n^2)$.
 \end{document}
