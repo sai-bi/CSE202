@@ -242,12 +242,64 @@ Obviously $C$ is not Toeplitz.
 We could use the first row and first column of the matrix to represent a
 Toeplitz matrix. That is,
 \begin{equation}
-  A \overset{\Delta}{=} [A_{1, 1...n}, A_{2...n, 1}], \text{where $A$ is a
-  Toeplitz matrix}  
+  A \overset{\Delta}{=} [A_{1, 1...n}; A_{1...n, 1}], \text{where $A$ is a
+  Toeplitz matrix}
 \end{equation}
-In this way, we just need to add $2n-1$ elements when adding two Toeplitz
+In this way, $A$ can be reconstructed as following:
+\[
+\begin{bmatrix}
+  A_{1,1} & A_{1, 2} & \dots & A_{1, n} \\
+  A_{2,1} & A_{1, 1} & \dots & A_{1, n-1} \\
+  \vdots & \vdots  & \ddots & \vdots \\
+  A_{n,1} & A_{n-1, 1} & \dots & A_{1,1}
+\end{bmatrix}
+\]
+Therefore we just need to add $2n$ elements when adding two Toeplitz
 matrices, and the complexity is $O(n)$.
 
 \subsection*{3}
+First we construct another Toeplitz matrix $B$ and $C$ as following:
+\begin{align}
+  \begin{split}
+    B &= [0, A_{n, 1}, A_{n-1, 1}, \dots, A_{2, 1}; 0, A_{1, n}, A_{1, n-1},
+    \dots, A_{1, 2}] \\
+    C &= \begin{bmatrix}
+      A & B \\
+      B & A \\
+    \end{bmatrix}
+  \end{split}
+\end{align}
+
+Then we know that $C$ is a \textit{circulant matrix}, which has the property
+that it can be diagonalized by the DFT matrix, that is $C = F^{-1}\Lambda F$,
+where $F$ is the DFT matrix.
+
+To calculate the product of $A$ and vector $v$, we have 
+\begin{align}
+  \begin{split}
+    Av & = (\mathbf{I}_{n\times n} \mathbf{0}_{n\times n}) C \begin{bmatrix}
+      v \\
+      \mathbf{0}_{n \times 1}
+    \end{bmatrix} \\
+    &= (\mathbf{I}_{n\times n} \mathbf{0}_{n\times n}) F^{-1}\Lambda F\begin{bmatrix}
+      v \\
+      \mathbf{0}_{n \times 1}
+    \end{bmatrix} 
+  \end{split}
+  \label{equ:5-3}
+\end{align}
+
+We also know that the product of DFT matrix as well as inverse DFT matrix with a vector can be calculated in 
+$O(n\log n)$. Therefore for Equation~\ref{equ:5-3}, the time complexity is
+analyzed as following:
+\begin{enumerate}
+  \item $F *: O(n\log n)$
+  \item $\Lambda *: O(n) $
+  \item $F^{-1} *: O(n\log n) $
+  \item $(\mathbf{I}_{n\times n} \mathbf{0}_{n\times n}) * : O(n) $
+\end{enumerate}
+Thus the time complexity is $O(n\log n)$.
+
+
 
 \end{document}
