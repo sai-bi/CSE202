@@ -94,12 +94,70 @@ $ST$, pop them from the stack mark their NGE as $-1$.
     ST.pop();
   }
 
-  print B
+  print B;
+  return B;
 \end{minted}
 
 \subsection*{Proof of correctness}
 
 
 \section*{Problem 2: Sorted matrix search}
+\subsection*{Algorithm description:}
+Let the target element be $T$.
+Start from the top right corner of the matrix, if current element is smaller
+than $T$, we go to the next element in the same column. If current element is 
+larger than $T$, we go to the previous element in the same row. If equal, return
+current position. Repeat this until we find the target or we have exceeded the
+boundary of the matrix.
+
+\subsection*{Pseudocode}
+\begin{minted}[frame=lines, framesep=2mm]{cpp}
+  Input: m*n matrix M, target element T
+  Output: (x, y) // position of T
+
+  y = 1;
+  x = n;
+  while (true) {
+    if (x < 0 || y < 0 || x > n || y > m) {
+      return (-1, -1); // target not found.
+    }
+
+    if (M[y][x] > T) {
+      x--;
+    } else if (M[y][x] < T) {
+      y++;
+    } else {
+      return (x, y);
+    }
+  }
+\end{minted}
+
+
+\section*{Problem 3: Maximum overlap of two intervals}
+\subsection*{Algorithm description:}
+Sort all the intervals in ascending order of starting point. Initial $t$ with
+the endpoint of the first interval, that is $t = b_1$. Scan the rest of intervals from left to
+right, and for current interval $[a_i, b_i], i = 2...n$, we calculate the interval overlapping
+as $d_i = t - a_i$, and update $t = \max(b_i, t)$. Return the max value of
+$d_i$ as the maximum overlap. 
+
+\subsection*{Pseudocode}
+\begin{minted}[frame=lines, framesep=2mm]{cpp}
+  Input: [a_i, b_i], i = 1...n
+  Output: maximum overlapping d
+
+  d = 0;
+  t = b_1;
+  for (i = 2; i <= n; i++) {
+    d = max(t - a_i, d);
+    t = max(b_i, t);
+  }
+  return d;
+\end{minted}
+
+\subsection*{Proof of correctness}
+
+\section*{Problem 4: 132 patterns}
+\subsection*{Algorithm description:}
 
 \end{document}
