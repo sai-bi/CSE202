@@ -36,7 +36,7 @@
 \normalfont \normalsize 
 \textsc{University of California San Diego} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge CSE202: Design and Analysis of Algorithms Homework 2 \\ % The assignment title
+\huge CSE 202: Design and Analysis of Algorithms Homework 2 \\ % The assignment title
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
@@ -157,7 +157,86 @@ $d_i$ as the maximum overlap.
 
 \subsection*{Proof of correctness}
 
-\section*{Problem 4: 132 patterns}
+\section*{Problem 4: 132 pattern}
 \subsection*{Algorithm description:}
+Let $A[1...n]$ be the input array,
+\begin{enumerate}
+\item Scan from left to right, and use $B$ to track the current minimum element,
+that is, the minimum of the elements in the subarray that has been scanned thus 
+far.
+
+\item Scan from right to left, and use $C$ to track the predecessor of current
+element, that is, the maximum element that is smaller than current element in
+the subarray that has been scanned thus far. If no predecessor is found, $C[i]$
+is set to $+\infty$. If $2 \leq i \leq n-1$ and $B[i] < C[i] < A[i]$, then we have found a
+$132$-pattern, return true. 
+
+\end{enumerate}
+If no $132$-pattern is found after the second scan, return false.
+
+\subsection*{Pseudocode}
+\begin{minted}[frame=lines, framesep=2mm]{cpp}
+  Input: A[1...n]
+  Output: patternExists
+  
+  patternExists = false;
+  min = +INF;
+  B = [];
+  for (int i = 1; i <= n; i++) {
+    if (A[i] < min) {
+      min = A[i];
+    }
+    B[i] = min;
+  }
+  
+  bst = createBalancedBST(); // Create balanced binary search tree.
+  for (int i = n; i >= 2; i--) {
+    if (i > 1 && i < n) {
+      pred = bst.findPredecessor(A[i]); // Find predecessor of A[i].
+      if (B[i] < pred && pred < A[i]) {
+        patternExists = true;
+        break;
+      }
+    }
+    bst.insert(A[i]);
+  }
+  return patternExists;
+\end{minted}
+
+\section*{Problem 5: Toeplitz matrices}
+\subsection*{1}
+The sum of two Toeplitz matrices is also Toeplitz.
+
+\textbf{Proof:}
+Let $A = (a_{ij}), B = (b_{ij})$ be two Toeplitz matrices, $C = A + B$, then
+\begin{align}
+  \begin{split}
+    c_{i,j} &= a_{i,j} + b_{i,j} \\
+           &= a_{i-1,j-1} + b_{i-1,j-1} \\
+           &= c_{i-1,j-1} 
+  \end{split}
+\end{align}
+Therefore $C$ is also Toeplitz.
+
+The product of two Toeplitz matrices is not necessarily Toeplitz. A
+counter-example is as following:
+\begin{align}
+  \begin{split}
+    A &= \begin{bmatrix}
+      1 & 0 \\
+      1 & 1 
+    \end{bmatrix} \\
+    B &= \begin{bmatrix}
+      2 & 1 \\
+      0 & 2 
+    \end{bmatrix} \\
+    C &= AB = \begin{bmatrix}
+      2 & 1 \\
+      2 & 3 
+    \end{bmatrix}
+  \end{split}
+\end{align}
+Obviously $C$ is not Toeplitz.
+
 
 \end{document}
