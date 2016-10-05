@@ -239,11 +239,15 @@ counter-example is as following:
 Obviously $C$ is not Toeplitz.
 
 \subsection*{2}
-We could use the \textit{antidiagonal} of the Toeplitz matrix to represent it.
-That is,
+We could use the first row and first column of the matrix to represent a
+Toeplitz matrix. That is,
 \begin{equation}
-  A \overset{\Delta}{=} [a_{i, n+1-i}], i = 1, 2, ..., n, \text{where $A$ is a
-  Toeplitz matrix}
+  A \overset{\Delta}{=} [A_{1, 1...n}, A_{2...n, 1}], \text{where $A$ is a
+  Toeplitz matrix}  
 \end{equation}
+In this way, we just need to add $2n-1$ elements when adding two Toeplitz
+matrices, and the complexity is $O(n)$.
+
+\subsection*{3}
 
 \end{document}
