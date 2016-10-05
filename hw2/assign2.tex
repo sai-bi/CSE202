@@ -26,9 +26,10 @@
 
 \setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
 
-%----------------------------------------------------------------------------------------
-%	TITLE SECTION
-%----------------------------------------------------------------------------------------
+\newtheorem{thm}{Theorem}
+\newcounter{claimcounter}
+\numberwithin{claimcounter}{section}
+\newenvironment{claim}{\stepcounter{claimcounter}{\textbf{Claim \theclaimcounter:}}}{}
 
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
 
@@ -49,7 +50,7 @@
 
 \maketitle % Print the title
 
-\section*{Problem 1: Next greater element}
+\section{Next greater element}
 
 \subsection*{Algorithm description:}
 The next greater element can be computed with a single scan of the array from
@@ -58,10 +59,10 @@ the NGE of each element.
 
 For an element $i$, we do the following:
 \begin{enumerate}
-  \item \label{list:a} If $ST$ is empty, push a pair $(i, A[i])$ to $ST$.
-  \item If $ST$ is not empty, let $(k, A[k])$ be the top element of $ST$.
+  \item \label{list:a} If $ST$ is empty, push a pair $i$ to $ST$.
+  \item If $ST$ is not empty, let $k$ be the top element of $ST$.
     \begin{enumerate}
-      \item If $A[k] \geq A[i]$, then push $(i, A[i])$ to $ST$.
+      \item If $A[k] \geq A[i]$, then push $i$ to $ST$.
       \item If $A[k] < A[i]$, then $NGE[k] = A[i]$. Pop top element from the
         stack. Go to Step~\ref{list:a}.
     \end{enumerate}
@@ -70,26 +71,26 @@ After the scan of the array finished, if there are still elements in the stack
 $ST$, pop them from the stack mark their NGE as $-1$.
 
 \subsection*{Pseudocode}
-\begin{minted}[frame=lines, framesep=2mm]{cpp}
+\begin{minted}[linenos=true, mathescape, frame=lines, framesep=2mm]{cpp}
   Input: A[1...N]
   Output: B[1...N]
 
   ST = stack();
   for (i = 1; i <= N; i++) {
     while (!ST.empty()) {
-      (k, v) = ST.top();
-      if (v < A[i]) {
+      k = ST.top();
+      if (A[k] < A[i]) {
         break;
       } else {
         B[k] = A[i];
         ST.pop();
       }
     }
-    ST.push_back((i, A[i]));
+    ST.push_back(i);
   } 
 
   while (!ST.empty()) {
-    (k, v) = ST.top();
+    k = ST.top();
     B[k] = -1; 
     ST.pop();
   }
@@ -99,9 +100,73 @@ $ST$, pop them from the stack mark their NGE as $-1$.
 \end{minted}
 
 \subsection*{Proof of correctness}
+\begin{claim}
+Each element will be pushed to the stack exactly once, and will also be 
+popped out from stack exactly once.
+\end{claim}
+
+\textbf{Proof:}
+From Line $15$, we know that each element $A[i]$ will be pushed to 
+stack exactly once at $i-th$ iteration. Also some elements are popped at 
+Line $12$, and for the remaining elements in stack, they are popped out 
+at Line $21$. 
+
+Therefore the claim holds.
+
+\begin{claim}\label{claim:prob1}
+For $1 \leq i \leq n $, after $i-th$ iteration, the values in $A$ corresponding
+to the indices stored in stack are in descending order. 
+\end{claim}
+
+\textbf{Proof:}
+After the first iteration, that is $i=1$, there is only one element in the
+stack, and obviously the claim holds.
+
+Assume that the claim holds after $i = k$ iterations. When $i = k+1$, 
+\begin{enumerate}
+  \item if $A[i] <= A[ST.top()]$, $i$ will be pushed to the stack and the stack remains
+    in descending order of values.
+  \item if $A[i] > A[ST.top()]$, then top element will be popped, and this step will be
+    repeated until $A[i] <= A[ST.top()]$ or stack is empty. Then $i$ is pushed to the stack 
+    and the stack remains  in descending order of values for both cases.
+\end{enumerate}
+Therefore, the claim holds.
+
+\begin{claim}\label{cl:2}
+  For $1 \leq i \leq n$,
+  if stack is not empty, let $k = ST.top()$,
+  if $A[i] > A[k]$, then $A[i]$ must the NGE
+  of A[k].
+\end{claim}
+
+\textbf{Proof:}
+Otherwise, it means that there must exist an element $k < j < i$ such that
+$A[j] > A[k]$. In this case, at $j-th$ iteration, based on
+Claim~\ref{claim:prob1}, we know that the values corresponding to the indices
+stored in stack are in descending order, then $A[St.top()] \leq A[k] < A[j]$,
+then we know that top elements will be popped from stack until stack is empty
+or $A[st.top] >= A[j]$, which means that $k$ will be popped out, and it will 
+not be in stack at iteration $i$, which forms a contradiction. Therefore,
+the claim holds.
+
+\begin{claim}
+  If $k$ remains in stack after all iterations, it doesn't has a NGE. 
+\end{claim}
+
+\textbf{Proof:}
+Assume $A[k]$ has an NGE $A[j]$, where $j > k$. Similarly at iteration $j$,
+$A[ST.top()] <= A[k] < A[j]$, and then top elements will be popped 
+out from stack until stack is empty or $A[ST.top] \geq A[j]$. Then we know that
+$k$ will be popped out, which contradicts to the preconditions.
+
+Therefore, the claim holds.
+
+\subsection*{Time complexity}
+Since each element is pushed and poped from stack once, the time complexity of
+the algorithms is $O(n)$.
 
 
-\section*{Problem 2: Sorted matrix search}
+\section{Sorted matrix search}
 \subsection*{Algorithm description:}
 Let the target element be $T$.
 Start from the top right corner of the matrix, if current element is smaller
@@ -132,8 +197,10 @@ boundary of the matrix.
   }
 \end{minted}
 
+\subsection*{Proof of correctness}
 
-\section*{Problem 3: Maximum overlap of two intervals}
+
+\section{Maximum overlap of two intervals}
 \subsection*{Algorithm description:}
 Sort all the intervals in ascending order of starting point. Initial $t$ with
 the endpoint of the first interval, that is $t = b_1$. Scan the rest of intervals from left to
@@ -157,7 +224,10 @@ $d_i$ as the maximum overlap.
 
 \subsection*{Proof of correctness}
 
-\section*{Problem 4: 132 pattern}
+
+
+
+\section{132 pattern}
 \subsection*{Algorithm description:}
 Let $A[1...n]$ be the input array,
 \begin{enumerate}
@@ -203,7 +273,7 @@ If no $132$-pattern is found after the second scan, return false.
   return patternExists;
 \end{minted}
 
-\section*{Problem 5: Toeplitz matrices}
+\section{Toeplitz matrices}
 \subsection*{1}
 The sum of two Toeplitz matrices is also Toeplitz.
 
