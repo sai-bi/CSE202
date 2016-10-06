@@ -265,10 +265,10 @@ Therefore, the time complexity is $O(n+m)$.
 \section{Maximum overlap of two intervals}
 \subsection*{Algorithm description:}
 Sort all the intervals in ascending order of starting point. Initial $t$ with
-the endpoint of the first interval, that is $t = b_1$. Scan the rest of intervals from left to
-right, and for current interval $[a_i, b_i], i = 2...n$, we calculate the interval overlapping
-as $d_i = min(t,b_i) - a_i$, and update $t = \max(b_i, t)$. Return the max value of
-$d_i$ as the maximum overlap. 
+the endpoint of the first interval, that is $t = b_1$. Initial $d = 0$. 
+Scan the rest of intervals from left to
+right, and for current interval $[a_i, b_i], i = 2...n$, we update the maximum overlapping
+as $d = \max(\min(t,b_i) - a_i, d)$, and update $t = \max(b_i, t)$. Return $d$ as the maximum overlap. 
 
 \subsection*{Pseudocode}
 \begin{minted}[frame=lines, framesep=2mm]{cpp}
@@ -289,14 +289,34 @@ $d_i$ as the maximum overlap.
 
 \subsection*{Proof of correctness}
 \begin{claim}
-  For the sorted intervals, the maximum overlapping of $[a_i, b_i]$ with
+  For the sorted intervals, the maximum overlapping of $[a_i, b_i], i > 2$ with
   previous intervals is $\max(\min(t, b_i) - a_i, 0)$, where $t$ is the largest
   endpoint of previous intervals.
 \end{claim}
 
-
-
 \textbf{Proof:}
+Since all the intervals are sorted in ascending order of starting point, so the
+starting point of the overlapping must be $a_i$. For the endpoint of overlapping,
+to make the length of the overlapping as large as possible, the endpoint point
+to be as large as possible, so we would like to consider the largest endpoint
+of previous intervals $t$. If $t \geq b_i$, then the overlapping is $[a_i, b_i]$.
+If $t < b_i$, the overlapping is $[a_i, t]$. A special case is $t < a_i$, where
+no overlapping is found, and the length is 0. Therefore, the maximum 
+overlapping with previous intervals is $\max(\min(t, b_i) - a_i, 0)$.
+
+Given this claim, we know that for each iteration we calculate the maximum
+overlapping of current interval with previous intervals, and compare current 
+maximum overlapping $curr\_d$ with maximum overlapping length of previous
+intervals $d$,
+and update the maximum appropriately $d = \max(d, curr\_d)$. Therefore, we can
+conclude that $d$ is the maximum length of overlapping.
+
+\subsection*{Time complexity}
+The algorithm first sort all intervals in ascending order of starting point,
+which has a time complexity of $O(n\log n)$. To calculate the maximum
+overlapping, the algorithm scans from left to right, and the time for each
+iteration is constant. Therefore, the time complexity for this step is $O(n)$.
+Therefore, the time complexity of the algorithm is $O(n\log n)$.
 
 \section{132 pattern}
 \subsection*{Algorithm description:}
