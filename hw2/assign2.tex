@@ -201,61 +201,79 @@ boundary of the matrix.
 \end{minted}
 
 \subsection*{Proof of correctness}
-\begin{claim} \label{cl:3}
-Every time we arrive at a position $(x, y)$, $T$ can only be found in region
-$[y...m, 1...x]$.
-\end{claim}
-\textbf{Proof:}
-When $x=n,y=1$, obviously $T$ can only be found $[1...m, 1...n]$. The claim
-holds.
+Assume that $T$ is in the matrix and its position is $(x, y)$, and after the search, $T$ is not found by the
+algorithm. We know that the path formed by the visited elements in the
+search divides the matrix into two parts, and $T$ is not on the path. 
 
-Suppose it holds for $x \geq j, y \leq i$, that is, $T$ can only be found 
-at $[i...m, 1...j]$. 
-\begin{enumerate}
-\item If $M[i][j] > T$, then $M[i...m][j] > T$, so $T$ can only be
-found in region $[i...m, 1...j-1]$, and we will arrive at $(i, j-1)$. So the
-claim also holds for $x \geq j-1, y \leq i$. 
+If $T$ is on the upper left part of the path, then there must exist an element
+$A[y][k]$ on the path and $k > x$. Since $A[y][x+1...k] > T$ so at $(y, x+1...k)$ the algorithm
+will search to the left until $(x, y)$ is reached and $T$ is found, which forms
+a contradiction.
+
+If $T$ is on the lower right part of the path, then there must exist an element 
+$A[k][x]$ on the path and $k < y$. Since $A[k...y-1][x] < T$, so at $(k...y-1, x)$ 
+the algorithm will search to the next element in the same column until 
+$(x, y)$ is reached and $T$ is found, which also forms a contradiction.
+
+Therefore, the case where $T$ is in the matrix but not found by the proposed
+algorithm is not possible. The correctness of the algorithm is proved.
+
+% \begin{claim} \label{cl:3}
+% Every time we arrive at a position $(x, y)$ in the process of search, $T$ can only be found in region
+% $[y...m, 1...x]$.
+% \end{claim}
+% \textbf{Proof:}
+% When $x=n,y=1$, obviously $T$ can only be found $[1...m, 1...n]$. The claim
+% holds.
+
+% Suppose it holds for $x \geq j, y \leq i$, that is, $T$ can only be found 
+% at $[i...m, 1...j]$. 
+% \begin{enumerate}
+% \item If $M[i][j] > T$, then $M[i...m][j] > T$, so $T$ can only be
+% found in region $[i...m, 1...j-1]$, and we will arrive at $(i, j-1)$. So the
+% claim also holds for $x \geq j-1, y \leq i$. 
     
-\item If $M[i][j] < T$, then 
-$M[i][1...j] < T$, so $T$ can only be found in region $[i+1...m, 1...j]$, and we
-will arrive at $(i+1, j)$, so the claim holds for $x \geq j, y \leq i+1$. 
+% \item If $M[i][j] < T$, then 
+% $M[i][1...j] < T$, so $T$ can only be found in region $[i+1...m, 1...j]$, and we
+% will arrive at $(i+1, j)$, so the claim holds for $x \geq j, y \leq i+1$. 
 
-\item If $M[i][j] = T$, we have found the target $T$, no position update will be
-  made.
-\end{enumerate}
-Therefore, the claim holds.
+% \item If $M[i][j] = T$, we have found the target $T$, no position update will be
+  % made.
+% \end{enumerate}
+% Therefore, the claim holds.
 
-\begin{claim}
-  If we arrive at position $(x,y)$ and $M[y][x] > T$, $T$ can only be found in 
-  the region $[y...m, 1...x-1]$.
-\end{claim}
+% \begin{claim}
+  % If we arrive at position $(x,y)$ and $M[y][x] > T$, $T$ can only be found in 
+  % the region $[y...m, 1...x-1]$.
+% \end{claim}
 
-\textbf{Proof:}
-Given Claim~\ref{cl:3}, we know that $T$ can only be found in region $[y...m,
-1...x]$. Since $M[y][x] > T$, we have $M[y...m][x] > T$, so $T$ can only 
-be found in region $[y...m, 1...x-1]$.
+% \textbf{Proof:}
+% Given first claim, we know that $T$ can only be found in region $[y...m,
+% 1...x]$. Since $M[y][x] > T$, we have $M[y...m][x] > T$, so $T$ can only 
+% be found in region $[y...m, 1...x-1]$.
 
-\begin{claim}
-  If we arrive at position $(x,y)$ and $M[y][x] < T$, $T$ can only be found in 
-  the region $[y+1...m, 1...x]$.
-\end{claim}
+% \begin{claim}
+  % If we arrive at position $(x,y)$ and $M[y][x] < T$, $T$ can only be found in 
+  % the region $[y+1...m, 1...x]$.
+% \end{claim}
 
-\textbf{Proof:}
-Given Claim~\ref{cl:3}, we know that $T$ can only be found in region $[y...m,
-1...x]$. Since $M[y][x] < T$, we have $M[y][1...x] < T$, so $T$ can only 
-be found in region $[y+1...m, 1...x]$.
+% \textbf{Proof:}
+% Given first claim, we know that $T$ can only be found in region $[y...m,
+% 1...x]$. Since $M[y][x] < T$, we have $M[y][1...x] < T$, so $T$ can only 
+% be found in region $[y+1...m, 1...x]$.
 
-\vspace{0.5cm}
-Given above claims, we conclude that every time we arrive at a position $(x,y)$,
-\begin{enumerate}
-  \item If $M[y][x] = T$, target is found and returned.
-  \item If $M[y][x] > T$, we just need to search the region $[y\dots m, 1\dots
-    x-1]$. That is we go to position $(y, x-1)$.
-  \item If $M[y][x] < T$, we just need to search the region $[y+ 1\dots m, 1\dots
-    x]$. That is we go to position $(y+1, x)$.
-\end{enumerate}
-If $T$ is not found after we exceed matrix boundary, then $T$ doesn't exist in 
-matrix.
+% \vspace{0.5cm}
+% Given above claims, we conclude that every time we arrive at a position $(x,y)$,
+% \begin{enumerate}
+  % \item If $M[y][x] = T$, target is found and returned.
+  % \item If $M[y][x] > T$, we just need to search the region $[y\dots m, 1\dots
+    % x-1]$. That is we go to position $(y, x-1)$.
+  % \item If $M[y][x] < T$, we just need to search the region $[y+ 1\dots m, 1\dots
+    % x]$. That is we go to position $(y+1, x)$.
+% \end{enumerate}
+% If $T$ is not found after we exceed matrix boundary, then $T$ doesn't exist in 
+% matrix.
+
 
 \subsection*{Time complexity}
 For every iteration, the algorithm either goes down one step or goes left 
