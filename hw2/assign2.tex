@@ -324,7 +324,7 @@ Let $A[1...n]$ be the input array,
 \begin{enumerate}
 \item Scan from left to right, and use $B$ to track the current minimum element,
 that is, the minimum of the elements in the subarray that has been scanned thus 
-far.
+far (excluding currently scanned element).
 
 \item Scan from right to left, and use $C$ to track the predecessor of current
 element, that is, the maximum element that is smaller than current element in
@@ -344,10 +344,10 @@ If no $132$-pattern is found after the second scan, return false.
   min = +INF;
   B = [];
   for (int i = 1; i <= n; i++) {
+    B[i] = min;
     if (A[i] < min) {
       min = A[i];
     }
-    B[i] = min;
   }
   
   bst = createBalancedBST(); // Create balanced binary search tree.
@@ -363,6 +363,45 @@ If no $132$-pattern is found after the second scan, return false.
   }
   return patternExists;
 \end{minted}
+
+\subsection*{Proof of correctness}
+\begin{claim}
+  We can find a $132$-pattern with $a_j$ as the largest element if and only if
+  $B[j] < C[j] < a_j$, where $B[i]$ is the minimum element in the subarray
+  $a[1\dots j-1]$, and $C(j)$ is the predecessor of $a_j$ in the subarray
+  $a[j+1\dots n]$.
+\end{claim}
+
+\textbf{Proof:}
+If $B[j] < C[j] < a_j$, obviously $B[j], C[j], a_j$ is a $132$-pattern.
+
+If there is a $132$-pattern in the subarray with $a_j$ as the largest element,
+then there exists $i < j < k$ such that $a_i < a_k < a_j$. $C[j]$ is the 
+predecessor of $a_j$ in the right subarray, so $a_k \leq C[j] < a_j$.
+$B[j]$ is the minimum element in the left subarray, so $B[j] \leq a_i$.
+So we have $B[j] < C[j] < a_j$.
+
+Therefore the claim holds.
+\vspace{0.5cm}
+
+Given this claim, we know that there exists a $132$-pattern in the array
+if and only if there exists $2 \leq j \leq n-1$ satisfying $B[j] < C[j] < a_j$.
+Therefore, the algorithm do a first scan from left to right to find the minimum 
+element in the left subarray of each element. And then do a second scan from 
+right to left to find the predecessor of each element in the right subarray, and
+compare the value of predecessor, the minimum element in the left subarray and
+current element. If it satisfies $B[j] < C[j] < a_j$, then there exists a 
+$132$-pattern in the array. If no $132$-pattern is found after the second scan,
+then there is no $132$-pattern in the array.
+
+\subsection*{Time complexity}
+The time complexity for finding minimum element in the left subarray is $O(n)$.
+To find a predecessor of an element, we build a balanced binary search tree,
+and when we scan from right to left, we insert the element in the tree, which is 
+an $O(\log n)$ operation, and finding the predecessor of an element in balanced
+binary search tree is also $O(\log n)$. The time complexity for
+second scan is $O(n\log n)$. Therefore, the time complexity of the algorithm is
+$(n\log n)$.
 
 \section{Toeplitz matrices}
 \subsection*{1}
