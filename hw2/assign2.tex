@@ -413,7 +413,8 @@ right to left to find the predecessor of each element in the right subarray, and
 compare the value of predecessor, the minimum element in the left subarray and
 current element. If it satisfies $B[j] < C[j] < a_j$, then there exists a 
 $132$-pattern in the array. If no $132$-pattern is found after the second scan,
-then there is no $132$-pattern in the array.
+then there is no $132$-pattern in the array. The correctness of the algorithm 
+is proved.
 
 \subsection*{Time complexity}
 The time complexity for finding minimum element in the left subarray is $O(n)$.
@@ -521,6 +522,12 @@ analyzed as following:
 \end{enumerate}
 Thus the time complexity is $O(n\log n)$.
 
+\textbf{Proof of correctness:}
+The proposed algorithm calculates the product of a Toeplitz matrix and a vector
+making use of the properties of \textit{circulant matrix} as well as 
+DFT matrix and definitions of matrix multiplication. The correctness of the 
+algorithm is obvious.
+
 \subsection*{4}
 The product of two Toeplitz matrices can be calculated in $O(n^2)$ time.
 
@@ -549,4 +556,8 @@ Let $A$ and $B$ be two $n\times n$ Toeplitz matrices, and $T = AB$.
 \end{enumerate}
 That is, the time complexity of the proposed algorithm for multiplying two
 Toeplitz matrices is $O(n^2)$.
+
+\textbf{Proof of correctness:} The proposed algorithm performs multiplication 
+of two Toeplitz matrices by definition of matrix multiplication. The correctness
+is obvious.
 \end{document}
