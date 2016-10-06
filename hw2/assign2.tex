@@ -267,7 +267,7 @@ Therefore, the time complexity is $O(n+m)$.
 Sort all the intervals in ascending order of starting point. Initial $t$ with
 the endpoint of the first interval, that is $t = b_1$. Scan the rest of intervals from left to
 right, and for current interval $[a_i, b_i], i = 2...n$, we calculate the interval overlapping
-as $d_i = t - a_i$, and update $t = \max(b_i, t)$. Return the max value of
+as $d_i = min(t,b_i) - a_i$, and update $t = \max(b_i, t)$. Return the max value of
 $d_i$ as the maximum overlap. 
 
 \subsection*{Pseudocode}
@@ -275,23 +275,28 @@ $d_i$ as the maximum overlap.
   Input: [a_i, b_i], i = 1...n
   Output: maximum overlapping d
 
-
   // sort all intervals in ascending order of starting point.
   [a_i, b_i] = sortIntervals([a_i, b_i]);
   d = 0;
   t = b_1;
   for (i = 2; i <= n; i++) {
-    d = max(t - a_i, d);
+    curr_d = min(t, b_i) - a_i;
+    d = max(curr_d, d);
     t = max(b_i, t);
   }
   return d;
 \end{minted}
 
 \subsection*{Proof of correctness}
-For initialization, the maximum overlapping length is set to $0$.
+\begin{claim}
+  For the sorted intervals, the maximum overlapping of $[a_i, b_i]$ with
+  previous intervals is $\max(\min(t, b_i) - a_i, 0)$, where $t$ is the largest
+  endpoint of previous intervals.
+\end{claim}
 
 
 
+\textbf{Proof:}
 
 \section{132 pattern}
 \subsection*{Algorithm description:}
