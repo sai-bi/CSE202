@@ -37,7 +37,7 @@
 \normalfont \normalsize 
 \textsc{University of California San Diego} \\ [25pt] % Your university, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge CSE 202: Design and Analysis of Algorithms Homework 2 \\ % The assignment title
+\huge CSE 202: Design and Analysis of Algorithms Homework 1 \\ % The assignment title
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
@@ -68,7 +68,7 @@ For an element $i$, we do the following:
     \end{enumerate}
 \end{enumerate}
 After the scan of the array finished, if there are still elements in the stack
-$ST$, pop them from the stack mark their NGE as $-1$.
+$ST$, pop them from the stack mark their NGE as \textit{null}.
 
 \subsection*{Pseudocode}
 \begin{minted}[linenos=true, mathescape, frame=lines, framesep=2mm]{cpp}
@@ -79,7 +79,7 @@ $ST$, pop them from the stack mark their NGE as $-1$.
   for (i = 1; i <= N; i++) {
     while (!ST.empty()) {
       k = ST.top();
-      if (A[k] < A[i]) {
+      if (A[k] >= A[i]) {
         break;
       } else {
         B[k] = A[i];
@@ -91,7 +91,7 @@ $ST$, pop them from the stack mark their NGE as $-1$.
 
   while (!ST.empty()) {
     k = ST.top();
-    B[k] = -1; 
+    B[k] = null; 
     ST.pop();
   }
 
@@ -161,6 +161,9 @@ $k$ will be popped out, which contradicts to the preconditions.
 
 Therefore, the claim holds.
 
+\vspace{0.5cm}
+Given above claims, the correctness of the algorithm can be proved.
+
 \subsection*{Time complexity}
 Since each element is pushed and poped from stack once, the time complexity of
 the algorithms is $O(n)$.
@@ -184,7 +187,7 @@ boundary of the matrix.
   x = n;
   while (true) {
     if (x < 0 || y < 0 || x > n || y > m) {
-      return (-1, -1); // target not found.
+      return null; // target not found.
     }
 
     if (M[y][x] > T) {
