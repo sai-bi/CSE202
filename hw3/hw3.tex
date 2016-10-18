@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{chngpage}
+\usepackage{soul,color}
+\usepackage{graphicx,float,wrapfig}
+\usepackage{clrscode}
+\usepackage{mathrsfs}
+\newcommand{\Class}{CSE 202}
+% \newcommand{\ClassInstructor}{Russell Impagliazzo}
+
+% Homework Specific Information. Change it to your own
+\newcommand{\Title}{Homework 2}
+\newcommand{\StudentName}{Sai Bi}
+\newcommand{\StudentClass}{}
+\newcommand{\StudentNumber}{}
+
+% In case you need to adjust margins:
+\topmargin=-0.45in      %
+\evensidemargin=0in     %
+\oddsidemargin=0in      %
+\textwidth=6.5in        %
+\textheight=9.0in       %
+\headsep=0.25in         %
+
+% Setup the header and footer
+\pagestyle{fancy}                                                       %
+\lhead{\Title}  %
+\rhead{\firstxmark}                                                     %
+\lfoot{\lastxmark}                                                      %
+\cfoot{}                                                                %
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}}                          %
+\renewcommand\headrulewidth{0.4pt}                                      %
+\renewcommand\footrulewidth{0.4pt}                                      %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some tools
+\newcommand{\enterProblemHeader}[1]{\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak%
+    \nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak}%
+\newcommand{\exitProblemHeader}[1]{\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak%
+    \nobreak\extramarks{#1}{}\nobreak}%
+
+\providecommand{\myceil}[1]{\left \lceil #1 \right \rceil }
+\newcommand{\homeworkProblemName}{}%
+\newcounter{homeworkProblemCounter}%
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]%
+{\stepcounter{homeworkProblemCounter}%
+    \renewcommand{\homeworkProblemName}{#1}%
+    \section*{\homeworkProblemName}%
+    \enterProblemHeader{\homeworkProblemName}}%
+{\exitProblemHeader{\homeworkProblemName}}%
+
+\newcommand{\homeworkSectionName}{}%
+\newlength{\homeworkSectionLabelLength}{}%
+\newenvironment{homeworkSection}[1]%
+{% We put this space here to make sure we're not connected to the above.
+    
+    \renewcommand{\homeworkSectionName}{#1}%
+    \settowidth{\homeworkSectionLabelLength}{\homeworkSectionName}%
+    \addtolength{\homeworkSectionLabelLength}{0.25in}%
+    \changetext{}{-\homeworkSectionLabelLength}{}{}{}%
+    \subsection*{\homeworkSectionName}%
+    \enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]}}%
+{\enterProblemHeader{\homeworkProblemName}%
+    
+    % We put the blank space above in order to make sure this margin
+    % change doesn't happen too soon.
+    \changetext{}{+\homeworkSectionLabelLength}{}{}{}}%
+
+\newcommand{\Answer}{\ \\\textbf{Answer:} }
+\newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+\newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof} \\}
+\newcommand{\Algorithm}{\textbf{Algorithm} \\}
+\newcommand{\EndProof} { \hfill$\square$ }
+\newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Make title
+\title{\textmd{\bf \Class: \Title}}
+\date{}
+\author{\textbf{\StudentName}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle \thispagestyle{empty}
+\section*{Problem 1: Nesting Boxes(CLRS)}
+\subsection*{Part 1}
+Suppose $\mathbf{x} = (x_1,\dots,x_d)$ nests within $\mathbf{y}=(y_1,\dots,y_d)$, and $\mathbf{y}$ nests
+within $\mathbf{z} = (z_1, \dots, z_d)$. Then there exists permutations $\pi_1, \pi_2$ on
+$\{1,2,\dots,d\}$ such that
+\begin{align}
+  \begin{split}
+    & x_{\pi_1(1)} < y_1, \dots, x_{\pi_1(d)} < y_d \\
+    & y_{\pi_2(1)} < z_1, \dots, y_{\pi_2(d)} < z_d \\
+  \end{split}
+\end{align}
+Given this, we have the following:
+\begin{align}
+  \begin{split}
+    z_1 > y_{\pi_2(1)} > x_{\pi_1(\pi_2(1))}, \cdots, 
+    z_d > y_{\pi_2(d)} > x_{\pi_1(\pi_2(d))} \\
+  \end{split}
+\end{align}
+Therefore, we know that $\mathbf{x}$ nests within $\mathbf{z}$, and the nesting relation is
+transitive. 
+
+\subsection*{Part 2}
+\Algorithm
+Let $\mathbf{x}, \mathbf{y}$ be two input $d$-dimensional box. We sort the elements in 
+$\mathbf{x}$ and $\mathbf{y}$ in ascending order. Then $\mathbf{x}$ nests within $\mathbf{y}$ if and
+only if each dimension in sorted $\mathbf{x}$ is smaller than the corresponding dimension in sorted 
+$\mathbf{y}$.
+
+\Proof
+If each dimension in sorted $\mathbf{x}$ is smaller than the corresponding dimension in sorted
+$\mathbf{y}$, then for each $y_i$, we pick $x_{\pi(i)}$ to be $y_i$'s corresponding element in the
+sorted $\mathbf{x}$. Obviously we have such a permutation that makes $\mathbf{x}$ nest within
+$\mathbf{y}$.
+
+If $\mathbf{x}$ nests within $\mathbf{y}$, let $x^*$ and $y^*$ be the sorted list. Assume that
+$x^*_i >= y^*_i$, then we know that 
+
+\begin{align}
+  \begin{split}  
+  x^*_k \geq y^*_j, \text{for any } k \geq i, j \leq i  \\
+  \end{split}
+\end{align}
+therefore for each $k \geq i$, $x^*_k$ can only corresponding to $y^*_j, j > i$, which is impossible
+because the former has $d - i + 1$ elements while the later has only $d-i$ elements. Therefore,
+the assumption is wrong, and we have $x^*_i < y^*_i$ for any $1 \leq i \leq d$.
+
+Given above, we can conclude that the proposed algorithm is correct.
+
+\subsection*{Part 3}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
