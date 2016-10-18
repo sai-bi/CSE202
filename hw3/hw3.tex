@@ -78,9 +78,8 @@
 \newcommand{\EndProof} { \hfill$\square$ }
 \newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \setlength\parindent{0pt}
-
+\usepackage{minted}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Make title
 \title{\textmd{\bf \Class: \Title}}
@@ -238,6 +237,30 @@ so we have $|T_1| \leq |T_2| \leq |T^*|$. That is $T^*$ is also optimal.
 By induction, we know that the proposed algorithm is optimal for all $N$.
 
 \Complexity
+An implementation of the proposed algorithm is as following:
+\begin{minted}[frame=lines, framesep=2mm]{cpp}
+  Input: [Ox_1, Ox_2,.., Ox_n]
+  Output: T
+  
+  // Sort all oxen in ascending order of strength
+  [Ox_1, Ox_2,.., Ox_n] = sort([Ox_1,.., Ox_n]);
+  i = 1;
+  j = n;
+  while (i < j) {
+    if (S(Ox_i) + S(Ox_j) >= P) {
+      add (Ox_i, Ox_j) to T;
+      i++;
+      j--;
+    } else {
+      i++;
+    }
+  }
+  return T;
+\end{minted}
+
+The time complexity of sorting all oxen is $O(n\log n)$. The loop is executed for at most $n-1$
+times, which has time complexity of $O(n)$. Therefore, the time complexity of the proposed algorithm
+is $O(n\log n)$.
 
 \end{document}
 
