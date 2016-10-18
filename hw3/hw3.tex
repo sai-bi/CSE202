@@ -72,6 +72,7 @@
 
 \newcommand{\Answer}{\ \\\textbf{Answer:} }
 \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
+\newcommand{\Complexity}{\vspace{0.3cm} \noindent\textbf{Time Complexity} \\}
 \newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof} \\}
 \newcommand{\Algorithm}{\textbf{Algorithm} \\}
 \newcommand{\EndProof} { \hfill$\square$ }
@@ -136,7 +137,24 @@ the assumption is wrong, and we have $x^*_i < y^*_i$ for any $1 \leq i \leq d$.
 
 Given above, we can conclude that the proposed algorithm is correct.
 
+\Complexity
+It takes $O(d\log d)$ time to sort the list, and $O(d)$ time to compare the elements in sorted
+list, therefore the time complexity of the proposed algorithm is $O(d\log d)$.
+
 \subsection*{Part 3}
+\Algorithm
+We regard each box as a vertex, and if a box $A$ nests within box $B$, we add an directed edge from $A$
+to $B$. In this way we can get a graph. Then the task of finding the longest sequence turns into the
+task of finding longest path in the graph.
+
+First we show that there is no circle in the graph. Assume that there is a circle, let $C$ be a vertex in a
+circle, then there is a path from $C$ to $C$. Since nesting relation is transitive, we know that $C$
+nests within itself, which forms a contradiction. Therefore the graph has no circle in it.
+
+Given that the graph is directed and acyclic, we could use \textit{Bellman Ford} algorithm to find the longest
+path in the graph. Return the length of the longest path in the graph as final result.
+
+
 
 \end{document}
 
