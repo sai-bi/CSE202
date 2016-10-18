@@ -173,11 +173,17 @@ We adpot a variant of \textit{Dijkstra's} algorithm to solve this problem. We re
 a vertex in the graph, and if there is a road between two sites, we add an edge between them.
 The algorithm works as following:
 
-\begin{minted}[frame=lines, framesep=2mm]{cpp}
-  Let S be the set of
-
-\end{minted}
-
+\begin{enumerate}
+  \item Assign each node $v$ an initial time estimation $T(v)$. For the initial node, set it to $0$, and for other nodes, set them to $\ifnty$.
+  \item Set the starting node as \textit{current}. And mark all other nodes as unvisited, and add them to the unvisited node set $Q$. 
+  \item \label{repeat1}
+  For the current node $v$, for all its neighbours $p$, if $d(p) > d(v) + \min\{f_e(d(v)), e
+  \text{are edges between}  u and v\}$, update $d(p)$ to this value.
+  \item When we are done considering all neighbour nodes of current node, we add current node as visited and remove it from $Q$.
+  \item If the destination node $v^*$ has been visited, or unvisited node set $Q$ is empty, return 
+  $d(v*)$ as the time needed to travel from starting point to destination.
+  \item Otherwise, pick the node $v$ with smallest $T(v)$ as current node. Go to Step~\ref{repeat1}.
+\end{enumerate}
 \section*{Problem 4: Oxen pairing}
 \Algorithm
 For all oxen in the group, we first pick the strongest ox $p$ and the weakest ox $q$ ($p$ and $q$
