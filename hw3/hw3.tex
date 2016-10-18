@@ -79,6 +79,7 @@
 \newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setlength\parindent{0pt}
+\setlength{\parskip}{0.2cm}%% 
 \usepackage{minted}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Make title
@@ -199,9 +200,35 @@ The algorithm works as following:
       to $w$. Return $+\infty$ as the time.      
 
     \item Otherwise, pick the unvisited node $v$ with smallest $T(v)$ as current node. Go to Step~\ref{repeat1}.
-  \end{enumerate}
+\end{enumerate}
 
-  \Proof
+\Proof
+We prove the following hypothesis: for each visited node $v$, $T(v)$ is the shortest time needed from $s$ to
+$v$. 
+
+We prove this by induction.
+For base case, there is only one visited node, that is the starting node $s$. Obviously the
+hypothesis is true.
+
+Assume that the hypothesis is true for $n-1$ visited nodes. According to the algorithm, when we
+choose the next node to visit, we select the one with minimum $T$. 
+Let $v$ be the next node, and $u = Prev(v)$. Then $T(v)$ must be the shortest time needed from 
+$s$ to $v$. 
+Otherwise, it means that there is a shorter path and it must contain another unvisited node.
+Let $v'$ be the first unvisited node on this path, then $T(v') < T(v)$, which
+contradicts the fact that $T(v)$ is minimum for all unvisited nodes. Therefore we know that 
+$T(v)$ must be the shortest time needed from $s$ to $v$.
+
+Hence the hypothesis also holds for $n$ visited nodes. By induction we know that the hypothesis is
+true.
+
+\Complexity
+The proposed algorithm has same time complexity as Dijkstra's algorithm, which is $O(|E| +
+|V|\log|V|)$, where $|E|$ is the number of edges, and $|V|$ is the number of vertices.
+
+\section*{Problem 3: Timing circuits}
+\Algorithm
+
 
 
 \section*{Problem 4: Oxen pairing}
