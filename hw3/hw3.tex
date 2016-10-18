@@ -154,6 +154,18 @@ nests within itself, which forms a contradiction. Therefore the graph has no cir
 Given that the graph is directed and acyclic, we could use \textit{Bellman Ford} algorithm to find the longest
 path in the graph. Return the length of the longest path in the graph as final result.
 
+\Proof
+As mentioned above, the longest sequence of nesting of boxes is equivalent to the longest path in
+the constructed graph. Since the graph is directed and acyclic, \textit{Bellman Ford} algorithm is
+used to find the longest path. Therefore the correctness of the proposed algorithm is obvious.
+
+\Complexity
+To construct the graph, we first sort the elements in each box, which takes $O(nd\log d)$ time, and
+afterwards for each pair of boxes we check whether they have nesting relations, which takes
+$(dn^2)$. To find the longest path in the graph, \textit{Bellman Ford} algorithm runs in time
+$O(V+E)$, where $V$ and $E$ are the number of vertices and edges in graph, and therefore the time
+complexity for this step is $O(n^2)$. In conclusion, the time complexity of the proposed algorithm
+is $O(dn^2)$.
 
 
 \end{document}
