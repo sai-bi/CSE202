@@ -79,6 +79,7 @@
 \newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\setlength\parindent{0pt}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Make title
@@ -167,6 +168,62 @@ $O(V+E)$, where $V$ and $E$ are the number of vertices and edges in graph, and t
 complexity for this step is $O(n^2)$. In conclusion, the time complexity of the proposed algorithm
 is $O(dn^2)$.
 
+
+\section*{Problem 4: Oxen pairing}
+\Algorithm
+For all oxen in the group, we first pick the strongest ox $p$ and the weakest ox $q$ ($p$ and $q$
+must be different), if they 
+are able to pull a plow, that is $S_p + S_q \geq P$, then we pair them as a team and delete them
+from the group, otherwise we delete the weakest ox from the group. Repeat this procedure until there 
+are less than two oxen remaining in the group. Return the number of teams formed as the maximal
+number of teams.
+
+\Proof
+\textbf{Claim 1}: 
+Let $p$ and $q$ be the strongest and weakest ox in the group, if $S_p + S_q < P$,
+then $q$ will not be included in any team.
+
+Proof: If $S_p + S_q < P$, then for the weakest ox $q$, for any other ox $x$, we have $S_x + S_q <
+S_p + S_q < P$, that is, $q$ cannot be paired with any ox to form a team to pull the plow. Claim 1
+is proved.
+
+\vspace{0.3cm}
+\textbf{Claim 2}: 
+Let $p$ and $q$ be the strongest and weakest ox in the group, if $S_p + S_q \geq P$, let $T_1$ be a
+set of teams that can pull the plow and doesn't include pair $(p, q)$, we claim that there exists
+$T_2$ which is another set of teams that include pair $(p, q)$ and $|T_2| \geq |T_1|$.
+
+Proof: first if neither $p$ or $q$ is in the teams of $T_1$, then obviously we can add team $(p,
+q)$ to team $T_1$ to form $T_2$, and $|T_2| = |T_1| + 1 > |T_1|$.
+
+If $p$ belongs to a team, $q$ doesn't belong to a team in $T_1$, let $(p, x)$ be the team, since 
+$S_p + S_q > P$, then obviously we use team $(p, q)$ to replace team $(p, x)$ to form $T_2$, and 
+$|T_2| = |T_1|$.
+
+
+If $q$ belongs to a team, $p$ doesn't belong to a team in $T_1$, similarly, let $(q, x)$ be the team, since 
+$S_p + S_q > P$, then obviously we use team $(p, q)$ to replace team $(q, x)$ to form $T_2$, and 
+$|T_2| = |T_1|$.
+
+If both $p$ and $q$ belong to teams in $T_1$ and $p, q$ are not in a team, let $(p, x)$, $(q, y)$ be
+the teams in $T_1$. We have the following:
+\begin{align}
+  S_x + S_y \geq S_q + S_y \geq P 
+\end{align}
+that is we can use $(x, y), (p, q)$ to replace $(p, x), (q, y)$ in $T_1$ to form $T_2$. And $|T_2| =
+|T_1|$.
+Given above, Claim 2 can be proved.
+
+\vspace{0.3cm}
+Following we use induction to prove that the result generate by proposed algorithm is optimal.
+Assume that the proposed algorithm is optimal when number of oxen is smaller than $N$. Then when
+there are $N$ oxen in the group, let $p$ and $q$ be the strongest and weakest ox.
+
+If $S_p + S_q < P$, according to Claim 1, we know that $q$ cannot form team with any other ox. We
+can safely remove $q$ from the group, then the problem reduces to the case of $N-1$. By induction,
+the proposed algorithm will generate optimal result.
+
+If $S_p + S_q \geq P$,
 
 \end{document}
 
