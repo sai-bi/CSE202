@@ -228,8 +228,28 @@ The proposed algorithm has same time complexity as Dijkstra's algorithm, which i
 
 \section*{Problem 3: Timing circuits}
 \Algorithm
+The algorithm works as following:
+\begin{enumerate}
+\item We use $L(v)$ to represent the length of the path from $v$ to leaf nodes. For all leaf nodes $v$, 
+we set $L(v)$ to $0$. We start from the leaf nodes.
 
+\item \label{repeat2} 
+  Considering all leaf nodes, if $p$ and $q$ are two leaf nodes that have same parent $u$, 
+if $l_{up} \neq l_{uq}$, we make the length of the shorter edge same as the length of the longer
+edge, that is
+\begin{align}
+  l_{up} = l_{uq} = \max(l_{up}, l_{uq})
+\end{align}
+Afterwards we update $L(u) = L(p) + L_{up}$.
 
+\item We go to the upper level of the tree, and regard the nodes on this level as leaf nodes. 
+  If we have reached the root node, return.
+  Otherwise go to Step~\ref{repeat2}.
+\end{enumerate}
+
+\Proof
+
+\Complexity
 
 \section*{Problem 4: Oxen pairing}
 \Algorithm
