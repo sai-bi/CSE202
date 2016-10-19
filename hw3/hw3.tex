@@ -482,9 +482,42 @@ is calculated as following:
   S(i+1, j - k) + k p_i - jf(k) 
 \end{align}
 Therefore $S(i, j)$ is calculated as following:
-\begin{align}
+\begin{align}\label{equ1}
   S(i, j) = \max_{0 \leq k \leq j} S(i+1, j-k) + k p_i - jf(k)
 \end{align}
+And for base case we have $S(n, j) = j(p_n - f(j))$. 
+
+To calculate $S(1, x)$, we scan from right to left and the algorithm works as following:
+\begin{minted}[frame=lines, framesep=2mm]{cpp}
+  Input: f, x, [p_1, p_2, .., p_n]
+  Output: S
+
+  Initial S(i, j) to 0, for 1 <= i <= n,  0 <= j <= x;
+  for (j = 0;j <= x; j++) {
+    S(n, j) = j(p_n - f(j));
+  }
+
+  for (i = n-1; i > 0; i--) {
+    for (j = 0; j <= x; j++) {
+      for (k = 0; k <= j; k++) {
+        S(i, j) = max(S(i, j), S(i+1, j-k) + k * p_i - j * f(k));
+      }
+    }
+  }
+
+  return S;
+\end{minted}
+
+With information from $S$, we can easily get the optimal way to sell stocks on each day by
+backtracking.
+
+\Proof
+In the previous part we have proved the correctness of base cases as well as correctness of 
+transition function in Equation~\ref{equ1}. By induction the algorithm is correct.
+
+\Complexity
+The time complexity for calculating the base case is $O(x)$. The most inner part in the \textit{for}
+loop is executed $O(nx^2)$ times. Hence the time complexity of the proposed algorithm is $O(nx^2)$.
 
 \end{document}
 
