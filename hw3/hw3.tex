@@ -228,26 +228,41 @@ The proposed algorithm has same time complexity as Dijkstra's algorithm, which i
 
 \section*{Problem 3: Timing circuits}
 \Algorithm
-The algorithm works as following:
+For each node $v$, we use $L(v)$ to represent the largest root-to-leaf distance from $v$ to 
+all leaves that are descendants of $v$.
+
+Starting from root node $v$, let $v_{l}$ and $v_{r}$ represent its left and right child. We do the
+following:
 \begin{enumerate}
-\item We use $L(v)$ to represent the length of the path from $v$ to leaf nodes. For all leaf nodes $v$, 
-we set $L(v)$ to $0$. We start from the leaf nodes.
-
-\item \label{repeat2} 
-  Considering all leaf nodes, if $p$ and $q$ are two leaf nodes that have same parent $u$, 
-if $l_{up} \neq l_{uq}$, we make the length of the shorter edge same as the length of the longer
-edge, that is
-\begin{align}
-  l_{up} = l_{uq} = \max(l_{up}, l_{uq})
-\end{align}
-Afterwards we update $L(u) = L(p) + L_{up}$.
-
-\item We go to the upper level of the tree, and regard the nodes on this level as leaf nodes. 
-  If we have reached the root node, return.
-  Otherwise go to Step~\ref{repeat2}.
+  \item If $L(v_l) > L(v_r)$, we add $L(v_l) - L(v_r)$ to the length of edge between $v$ and $v_r$.
+  \item If $L(v_l) < L(v_r)$, we add $L(v_r) - L(v_l)$ to the length of edge between $v$ and $v_l$.
+  \item If $L(v_l) = L(v_r)$, we do nothing.
 \end{enumerate}
+We do the same recursively to the left and right subtress of $v$ until we go to the leaf node.
 
 \Proof
+\textbf{Claim 1}: for any non-leaf node $v$, and let $v_r$ and $v_l$ be two child of $v$. If a
+solution adds
+length to both edges $e_r = (v, v_r)$ and $e_l = (v, v_l)$, the solution is not optimal.
+
+\textbf{Proof}: Suppose we have added length $l_r, l_l$ to $e_r, e_l$ respectively. Without lose of
+generality, we assume $l_l < l_r$. Obviously we can simply add $l_r - l_l$ to $e_r$, and after this
+the tree still has zero skew. Since $l_r - l_l < l_r + l_l$, the original solution is not optimal.
+
+\textbf{Claim 2}: let $v$ be an non-root internal node, if a solution increases the length of all paths from
+$v$ to the leaves in the subtree rooted at $v$, then this solution is not optimal.
+
+\textbf{Proof}: since the lengths of paths from $v$ to all leaves has been increased, for each
+of such paths, it must include an edge $e$ whose length has been increased. For each path, we select
+the first of such edges on the path, and use $Q$ to represent this set. We know that the number of edges
+in $Q$ must be more than $2$ because paths from $v$ to leaves on left subtree and paths from $v$ 
+to leaves on right subtree cannot share a common edge. Given this, let $l$ be the minimum increase
+of length for edges in $Q$, we could reduce the  lengths of edges in $Q$ by $l$, and add $l$ to the
+edge between $v$ and its parent. After this, the tree still has zero skew. In this process, we have
+reduced a length of $|Q|l$ and increased a length of $l$. Since $|Q|l \geq 2l > l$, the modified solution increase
+the length less than original solution. Hence the original solution is not optimal.
+
+Given above claims, we can prove that the proposed algorithm is optimal. 
 
 \Complexity
 
