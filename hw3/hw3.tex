@@ -412,6 +412,26 @@ To find the shortest path between $s$ and $t$, the time complexity of $E$ is $O(
 In summary, the time complexity of the proposed algorithm is $O(\sum_{i=0}^{b}|E_i|)$.
 
 \subsection*{Part 2}
+\Algorithm
+We apply dynamic programming to solve this problem. Use $S(i)$ to represent to cost of optimal solution
+for $P_0, P_1, \dots, P_i$. And also we use $L_{i, j}$ to represent the length of $s-t$ path
+in all graphs $G_i, G_{i+1}, \dots, G_j$. If no such $s-t$ path exists, we set $L_{i, j}$ to
+$+\infty$.
+
+To calculate $S(b)$, suppose that the last index $i$ where $P_i \neq P_{i+1}$. The cost of this
+solution is as following:
+\begin{align}
+  cost = S(i) + K + (b - i)L(i+1, b)
+\end{align}
+Therefore, $S(b)$ can be derived as following:
+\begin{align}
+  S(b) = \min_{0\leq i < b} S(i) + K + (b-i)L(i+1, b)
+\end{align}
+Here we don't include the case where $P_i = P_{i+1}$ for $ 0 \leq i < b$. In this case, we have 
+$S(b) = (b+1)L(0, b)$. Therefore, the complete solution should be:
+\begin{align}
+  S(b) = \min((b+1)L(0,b), \min_{0\leq i < b} S(i) + K + (b-i)L(i+1, b))
+\end{align}
 
 
 \section*{Problem 6}
