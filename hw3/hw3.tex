@@ -468,7 +468,23 @@ In summary, the time complexity of the proposed algorithm is $O(b^3 |V|^2)$, whi
 time.
 
 \section*{Problem 6}
+\Algorithm
+We use dynamic programming to solve this problem. Let $S(i, j)$ represent the maximal income of
+optimal solution by selling $j$ shares of stocks from day $i$ to day $n$.
 
+Suppose that we sell $k$ stocks on day, if we don't consider the price drop due to the selling of
+$k$ stocks, then the income will be $ S(i+1, j-k)$, which is the maximal income of selling remaining 
+$j-k$ stocks from day $i+1$ to day $n$, plus $k p_i$, which is the income of selling $k$ stocks on
+day $i$. Now we consider price drop due to selling $k$ stocks, which will make the price of each
+stock drop by $f(k)$, that is it will result in a total loss of $jf(k)$. In summary, the income
+is calculated as following:
+\begin{align}
+  S(i+1, j - k) + k p_i - jf(k) 
+\end{align}
+Therefore $S(i, j)$ is calculated as following:
+\begin{align}
+  S(i, j) = \max_{0 \leq k \leq j} S(i+1, j-k) + k p_i - jf(k)
+\end{align}
 
 \end{document}
 
@@ -491,4 +507,4 @@ time.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
