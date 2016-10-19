@@ -404,12 +404,12 @@ between $s$ and $t$. Therefore the proposed algorithm is correct.
 
 \Complexity
 To construct the graph, we need to find the common edges among $E_0,E_1,\dots,E_b$, the complexity
-of this step is $O(\sum_{i=0}^{b}|E_i|)$. Also we need to add all the nodes, and the time complexity 
-is $O(|V|)$.
+of this step is $O(b|V|^2)$ (there are at most $O(|V|^2)$ edges in graph). 
+Also we need to add all the nodes, and the time complexity  is $O(|V|)$.
 
-To find the shortest path between $s$ and $t$, the time complexity of $E$ is $O(\min\{|E_i|\})$.
+To find the shortest path between $s$ and $t$, the time complexity of BFS is $O(|V|^2)$.
 
-In summary, the time complexity of the proposed algorithm is $O(\sum_{i=0}^{b}|E_i|)$.
+In summary, the time complexity of the proposed algorithm is $O(|V|^2)$.
 
 \subsection*{Part 2}
 \Algorithm
@@ -425,14 +425,47 @@ solution is as following:
 \end{align}
 Therefore, $S(b)$ can be derived as following:
 \begin{align}
-  S(b) = \min_{0\leq i < b} S(i) + K + (b-i)L(i+1, b)
+  S(b) = \min_{0\leq i < b} S(i) & + K + (b-i)L(i+1, b), b \geq 1\\
+  S(0) &= L(0,0)
 \end{align}
 Here we don't include the case where $P_i = P_{i+1}$ for $ 0 \leq i < b$. In this case, we have 
 $S(b) = (b+1)L(0, b)$. Therefore, the complete solution should be:
 \begin{align}
-  S(b) = \min((b+1)L(0,b), \min_{0\leq i < b} S(i) + K + (b-i)L(i+1, b))
+  S(b) = \min((b+1)L(0,b), & \min_{0\leq i < b} S(i) + K + (b-i)L(i+1, b)), b\geq 1 \\
+  S(0) &= L(0, 0)
 \end{align}
 
+Given above relations, we could scan over $G_0, G_1, \dots, G_b$ from left to right and calculate 
+$S(i)$. In this process, we also update the optimal $s-t$ path we select for each graph. 
+
+\Proof
+We prove that $S(i)$ is the minimum cost for $G_0, G_1, \dots, G_i$ by induction.
+
+For base case, that is $i=0$, we have $S(0) = L(0,0)$. By definition of $L$, obviously it is
+correct.
+
+Suppose the proposed algorithm is correct for all $i \neq n$. When $i = n+1$, to get the optimal
+solution for $n+1$, we consider all possible formulations of the solution. 
+
+If all graphs $G_0, \dots, G_{n+1}$ share the same $s-t$ paths, the cost is $(n+2)L(0, n+1)$.
+
+Otherwise suppose the last index 
+$j$ where $P_j \neq P_{j+1}$ in our solution, then the cost will be $S(j) + K + (n+1-j) L(j+1,
+n+1)$. Therefore we just to iterate over all possible $j$ to find the minimum cost. Compare the
+minimum cost with $(n+2)L(0,n+1)$ and assign the smaller one to $S(n+1)$. That is,
+\begin{align}
+  S(n+1) = \min((n+1+1)L(0,n+1), \min_{0\leq i < n+1} S(i) + K + (n+1-i)L(i+1, n+1))
+\end{align}
+The hypothesis also holds for $n+1$. The correctness of the algorithm is proved.
+
+\Complexity
+First we need to calculate $L$ for each pair of $G_i, G_j$. There are a total of $O(b^2)$ pairs, and
+calculating a pair can take $O(b|V|^2)$ time, so time complexity is $O(b^3 |V|^2)$. 
+The time complexity finding shortest path for each graph via BFS algorithm is $O(b|V|^2)$.
+After this, it takes $O(b)$ time to finish the scan from left to right to calculate $S(i)$. 
+
+In summary, the time complexity of the proposed algorithm is $O(b^3 |V|^2)$, which is in polynomial
+time.
 
 \section*{Problem 6}
 
