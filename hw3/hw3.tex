@@ -387,16 +387,29 @@ is $O(n\log n)$.
 \section*{Problem 5}
 \subsection*{Part 1}
 \Algorithm
-We construct a new graph with the set of nodes $V$. In the new graph, for two nodes $p$ and $q$,
+We construct a new graph $G^*$ with the set of nodes $V$. In the new graph, for two nodes $p$ and $q$,
 we add an edge between them if and only if there is an edge between them in all graphs $G_0, G_1,
 \dots, G_b$.
 
-With this graph, we can find the shortest path between $s$ and $t$ with \textit{Bellman-Ford} 
+With this graph, we can find the shortest path between $s$ and $t$ with \textit{Breadth-first
+search(BFS)} 
 algorithm.
 
 \Proof
+Let $L$ be the target $s-t$ path. First we show that such a path $L$ must exist in $G^*$. Since
+every edge on $L$ is connected on all graphs, so every edge on $L$ must exist in $G^*$. Given this,
+obviously $L$ exists in $G^*$. Since \textit{BFS} algorithm always returns the shortest
+path between $s$ and $t$, so the returned path by proposed algorithm must be the shortest path
+between $s$ and $t$. Therefore the proposed algorithm is correct.
 
 \Complexity
+To construct the graph, we need to find the common edges among $E_0,E_1,\dots,E_b$, the complexity
+of this step is $O(\sum_{i=0}^{b}|E_i|)$. Also we need to add all the nodes, and the time complexity 
+is $O(|V|)$.
+
+To find the shortest path between $s$ and $t$, the time complexity of $E$ is $O(\min\{|E_i|\})$.
+
+In summary, the time complexity of the proposed algorithm is $O(\sum_{i=0}^{b}|E_i|)$.
 
 \subsection*{Part 2}
 
