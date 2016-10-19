@@ -262,9 +262,33 @@ edge between $v$ and its parent. After this, the tree still has zero skew. In th
 reduced a length of $|Q|l$ and increased a length of $l$. Since $|Q|l \geq 2l > l$, the modified solution increase
 the length less than original solution. Hence the original solution is not optimal.
 
-Given above claims, we can prove that the proposed algorithm is optimal. 
+Given above claims, we can prove that the proposed algorithm is optimal. Otherwise, assume that
+at an node the solution doesn't work same as the proposed algorithm. Let $v$ be such a node, and
+$v_l, v_r$ be its left and right child respectively. Suppose that the solution adds $l_l, l_r$ to 
+the edge $e_l = (v, v_l)$ and $e_r = (v, v_r)$. Without lose of generality, we assume that $l_l <
+l_r$. 
+
+There are following three cases:
+\begin{enumerate}
+  \item $l_l  + L(v_l) = l_r + L(V_r)$, and $l_l \neq 0$. In this case, by Claim 1 we know that this
+    solution is not optimal. Note that $l_l$ cannot be zero, otherwise it is the same as proposed
+    algorithm.
+
+  \item $l_l  + L(v_l) > l_r + L(V_r)$. In this case, we know that the solution has to increase the
+    length of paths from $v_r$ to all leaves in the subtree rooted at $v_r$. By Claim 2, we know
+    that this solution is not optimal.
+
+  \item $l_l  + L(v_l) < l_r + L(V_r)$. Similarly, we know that the solution has to increase the
+    length of paths from $v_l$ to all leaves in the subtree rooted at $v_l$. By Claim 2, we know
+    that this solution is not optimal.
+\end{enumerate}
+Therefore we know that the solution is not optimal. Hence the proposed algorithm is optimal.
 
 \Complexity
+To find the maximal node-to-leaf distance for each node , we need to traverse the complete binary tree, 
+which has time complexity of $O(|V|)$. To adjust the length of edges, each node is also visited
+once,  which also has time complexity of $O(|V|)$. Therefore, the time complexity of the proposed
+algorithm is $O(|V|)$.
 
 \section*{Problem 4: Oxen pairing}
 \Algorithm
