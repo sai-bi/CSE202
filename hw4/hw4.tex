@@ -154,13 +154,64 @@ In conclusion, we have proved that the proposed algorithm is correct.
 
 \section*{Problem 2: Graph cohesiveness}
 \Algorithm
-We construct a graph $G^*$ as following:
+We construct a new graph $G^*$ as following:
 \begin{enumerate}
   \item For each vertex $v_i$ in $G$, we also add a corresponding vertex $v_i$ to $G^*$.
-  \item For each edge $e_ij$ in $G$, we add a vertex $v_{ij}$ to $G^*$.  
+  \item For each edge $e_{ij}$ in $G$, we add a vertex $v_{ij}$ to $G^*$.  
   \item We add a source node $s$ and a sink node $t$ to $G^*$.
-  \item
-\end{enumerate}<++>
+  \item Add edges from source node $s$ to all nodes $v_{ij}$, and set the capacity of
+    these edges to $1$.
+  \item Add edges from all nodes $v_i$ to sink node $t$, and set the capacity of these edges to
+    $\alpha$.
+  \item Add edges from node $v_{ij}$ to node $v_i$ and $v_j$, and set the capacity of these edges
+   to $+\infty$.   
+\end{enumerate}
+Given graph $G^*$, suppose that the capacity of its minium cut is $T$, then there exists a
+set with cohesiveness $\alpha$ if and only $T < |E|$, where $|E|$ is the number of edges in $G$. 
+
+\Proof
+Let $(A, B)$ be a minimum cut in graph $G^*$, let $S$ be a set of vertices $v_i$ that belong to $A$,
+that is $S = \{v_i | v_i \in A \}$. We have the following claims.
+
+\textbf{Claim 1:} If $v_{ij}\in A$, then $v_i \in A, v_j \in A$.
+
+Proof: If $v_i \notin A$, then $v_i \in B$. Since the edge between $v_{ij}$ and $v_i$ have a
+capacity of $+\infty$, therefore we know that the capacity of cut $(A, B)$ would be $+\infty$, which
+is obviously not a minimum cut. Therefore $v_i$ must be in $A$. Similarly we can prove that $v_j$
+must also belong to $A$.   
+
+\textbf{Claim 2:} If $v_i \in A, v_j \in A$, then $v_{ij} \in A$.
+
+Proof: Suppose $v_{ij} \notin A$, then we know $v_{ij} \in B$. We know that $v_ij$ only have edges
+to $s$, $v_i$ and $v_j$, and they all belong to $A$, so $v_{ij}$ cannot belong to $B$. That is,
+$v_{ij}$ must belong to $A$. 
+
+\textbf{Claim 3:} Let $C(A, B)$ be the capacity of the minimum cut $(A,B)$, then $C(A, B) = |E| -
+e(S) + \alpha|S|$, where $|E|$ the number of edges is $G$. 
+
+Proof: Given $S = \{v_i | v_i \in A \}$, we know the number of nodes $v_{ij}$ satisfying $v_{ij} \in A$ is
+$e(S)$. And the number of nodes $v_{ij}$ satisfying  $v_{ij}\in B$ is $|E| - e(S)$, and for each
+of the node in this kind, there is an edge from source $s$ to it, and the capacity they contribute
+is $|E| - e(S)$. 
+
+Also we know that $A$ also have outgoing edges to $B$ starting from $v_i$ where $v_i \in A$. 
+The number of edges are $|S|$, and each edge has a capacity of $\alpha$, so
+the capacity contributed by these edges is $\alpha|S|$. 
+
+In summary, the capacity of the minimum cut $C(A, B)$ is $|E| - e(S) + \alpha |S|$.
+
+\textbf{Claim 4:} 
+There is a set $S$ with cohesiveness at least $\alpha$ if and only if $C(A, B) \leq |E|$.
+
+Proof: If $C(A, B) \leq |E|$, then we have
+\begin{align}
+    |E| - e(S) + \alpha |S| & \leq |E| \\
+    \alpha & \leq \frac{e(S)}{|S|} 
+\end{align}
+So we have a set S statisfying with cohesiveness at least $\alpha$.
+
+% Conversely, if we have a set $S$ with cohesiveness at least $\alpha$, assume $C(A, B) = |E| -
+% e(S) + \alpha |S| > |E|$, then we have 
 
 
 \section*{Problem 3: Number puzzle}
