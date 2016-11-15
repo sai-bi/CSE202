@@ -92,30 +92,38 @@
 \maketitle \thispagestyle{empty}
 \section*{Problem 1: Job scheduling}
 \Algorithm
+We solve this problem by network flow. For each job $j$, we create a node $v_j$. For each time unit
+$t_p$ during which at least one of the processor is available, we add a node $u_p$. Also we add a
+directed edge from source $s$ to $v_j$ and from $u_p$ to sink $t$. We add other edges and set their
+capacities as following:
+\begin{enumerate}
+  \item The capacity of edge from start node $s$ to job $v_j$ is equal to the processing time
+    $v_j$ needs, that is $C(s, v_j) = \ell_j$. 
+  \item The capacity of edge from node $u_p$ to sink $t$ is equal to the number of processors that
+    is available at this time unit. That is $C(u_p, t) = |\{i | t_i \leq u_p < t_i', 1 \leq i \leq k\}|$.  
+  \item For each node $v_j$ and $u_p$, if $a_j \leq u_p$ and $d_j > u_p$, we add an edge between $v_j$
+    and $u_p$ with a capacity of $1$. In this way, we can guarantee that the job cannot be assigned
+    to a processor before it arrives and after the deadline passes. Also by setting capacity to $1$
+    we guarantee that a job can only be set to one processor at a time unit.  
+\end{enumerate}
+
+Given above formulation, we can find the maximum flow of the network. If the capacity of the maximum
+flow is equal to the sum of lengths of all jobs $\sum_{j} \ell_j$, then we know that the jobs can
+all be completed. Otherwise, the jobs cannot be completed. To determine a proper scheduling when the
+jobs can all be completed, suppose there is an edge with capacity $1$ between $v_j$ and $u_p$, we
+know at time $t_p$ that job $v_j$ can be assigned to a remaining processor that is available at $t_p$, and delete it from
+available list at $t_p$.
+
 \Proof
-\Complexity
-
-
+Let us see that an 
 
 \section*{Problem 2: Graph cohesiveness}
-\Algorithm
-\Proof
-\Complexity
 
 \section*{Problem 3: Number puzzle}
-\Algorithm
-\Proof
-\Complexity
 
 \section*{Problem 4: Database projections}
-\Algorithm
-\Proof
-\Complexity
 
 \section*{Problem 5: Maximum likelihood points of failure}
-\Algorithm
-\Proof
-\Complexity
 
 \end{document}
 
