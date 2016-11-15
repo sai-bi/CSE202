@@ -248,6 +248,56 @@ time complexity is $O(|V||E|^2 \log |V|^3 )$. Therefore, the time complexity of 
 algorithm is $O(|V|^5 \log |V|)$.
 
 \section*{Problem 3: Number puzzle}
+\Algorithm
+First, if any of $r_i$  is smaller than $n$, or any of $c_i$ is smaller than $n$, obviously no such
+matrix exists.
+
+If $r_i \leq n$ and $c_i \leq n$ for all $1 \leq i \leq n$, we construct a graph $G$ as following:
+\begin{enumerate}
+  \item For each $r_i$, we add a node $v_i$.
+  \item For each $c_i$, we add a node $u_i$.
+  \item Add a source node $s$.
+  \item Add a sink node $t$.
+  \item Add an edge from $s$ to $v_i$, and set the capacity to $r_i - n$.
+  \item Add an edge from $u_i$ to $t$, and set the capacity to $c_i - n$.
+  \item For each pair of $v_i$ and $u_j$, we add an edge from $v_i$ to $u_j$, and set the capacity to
+    $M-1$. 
+\end{enumerate}
+
+With graph $G$, we find the maximum flow of it. Assume the capacity of the maximum flow is $T$, then
+the required matrix exists if and only following conditions are met:
+\begin{align}
+  T = \sum_{i=1}^{n} (r_i - n) = \sum_{i=1}^{n}(c_i - n)
+\end{align}
+
+If the matrix exists, suppose in the maximum flow the flow from $v_i$ to $u_j$ is $f_{ij}$, then we can reconstruct the
+matrix by setting $a_{ij} = f_{ij} + 1$.
+
+
+\Proof
+\textbf{Claim 1:} If such a matrix exists, we must have $ T = \sum_{i=1}^{n} (r_i - n) =
+\sum_{i=1}^{n}(c_i - n)$.
+
+Proof: If such a matrix exists, obviously we have 
+\begin{align}
+  \sum_{i=1}^{n}c_i &= \sum_{i=1}^{n}r_i \\
+  \sum_{i=1}^{n}(c_i -n) &= \sum_{i=1}^{n}(r_i - n)  
+\end{align}
+
+We just need to prove the capacity of maximum flow $T$ is equal to $ \sum_{i=1}^{n}(r_i -n)$.
+We can construct a flow as following: for edge from $s$ to $v_i$, we set the flow as $r_i - n$.     
+For edge from $u_i$ to $t$, we set the flow as $c_i - n$. And for edge between $v_i$ and $u_j$, we
+set the flow as $a_{ij} - 1$. In this way, we can easily check that it satisfies the constraints of
+the network flow. Also this is a maximum flow since the capacity of the flow is $\sum_{i=1}^{n}(r_i
+- n)$, which is the maximum flow going out of source. Hence Claim 1 is proved.
+
+\textbf{Claim 2:} If $T = \sum_{i=1}^{n} (r_i - n) = \sum_{i=1}^{n}(c_i - n)$, the required
+matrix must exist.
+
+
+
+\Complexity
+
 
 \section*{Problem 4: Database projections}
 
