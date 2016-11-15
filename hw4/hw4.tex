@@ -153,6 +153,7 @@ In conclusion, we have proved that the proposed algorithm is correct.
 \Complexity
 
 \section*{Problem 2: Graph cohesiveness}
+\subsection*{Part 1}
 \Algorithm
 We construct a new graph $G^*$ as following:
 \begin{enumerate}
@@ -205,14 +206,46 @@ There is a set $S$ with cohesiveness at least $\alpha$ if and only if $C(A, B) \
 
 Proof: If $C(A, B) \leq |E|$, then we have
 \begin{align}
-    |E| - e(S) + \alpha |S| & \leq |E| \\
+    |E| - e(S) & + \alpha |S|  \leq |E| \\
     \alpha & \leq \frac{e(S)}{|S|} 
 \end{align}
-So we have a set S statisfying with cohesiveness at least $\alpha$.
+So we have a set S satisfying with cohesiveness at least $\alpha$.
 
-% Conversely, if we have a set $S$ with cohesiveness at least $\alpha$, assume $C(A, B) = |E| -
-% e(S) + \alpha |S| > |E|$, then we have 
+Conversely, if we have a set $S$ with cohesiveness at least $\alpha$, we can construct a cut as
+following:
+\begin{align}
+  A & = \{s\} \cup S \cup \{v_{ij}  | v_i \in S, v_j \in S \} \\
+  B & = \{v | v \in G^*, v \notin A\}
+\end{align}
+It is easy to know that the capacity of cut $(A, B)$ is $|E| - e(S) + \alpha |S|$. Given
+$\frac{e(S)}{S} \geq \alpha$, we have $C(A, B) \leq |E|$. So the capacity of the minimum cut must
+also be smaller than or equal to $|E|$.
 
+Given above claims, we have proved the correctness of the proposed algorithm.
+
+\Complexity
+The time used to construct $G^*$ is $O(|V||E|)$. And to find the minimum cut in $G^*$, we can
+apply \textit{Edmonds-Karp} method, which has a time complexity of $O(|V||E|^2)$. Hence the time
+complexity of the proposed algorithm is $O(|V|^5)$.
+
+\subsection*{Part 2}
+\Algorithm
+Given the algorithm in Part 1, we can enumerate all possible values of $\frac{e(S)}{S}$. And for
+all possible cohesiveness values, we sort them in ascending order. And then we find the maximum
+possible cohesiveness value $\beta$ such that there is a set $S$ with cohesiveness value at least 
+$\beta$. Then the maximum cohesiveness in $G$ would be $\beta$. The corresponding set would be the
+$S$ we construct on $G^*$ in Part 1.   
+
+\Proof
+The correctness of the proposed algorithm is obvious since we have enumerated all possible
+cohesiveness values
+and finding the maximum cohesiveness value among them.
+
+\Complexity
+The number of all possible cohesiveness values is $O(|V|^3)$. And to sort them, the time complexity
+is $O(|V|^3 \log |V|)$. And to find the maximum possible cohesiveness value $\beta$ in a sorted array, the
+time complexity is $O(|V||E|^2 \log |V|^3 )$. Therefore, the time complexity of the proposed
+algorithm is $O(|V|^5 \log |V|)$.
 
 \section*{Problem 3: Number puzzle}
 
