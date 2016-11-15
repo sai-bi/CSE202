@@ -294,10 +294,28 @@ the network flow. Also this is a maximum flow since the capacity of the flow is 
 \textbf{Claim 2:} If $T = \sum_{i=1}^{n} (r_i - n) = \sum_{i=1}^{n}(c_i - n)$, the required
 matrix must exist.
 
+If $T = \sum_{i=1}^{n} (r_i - n) = \sum_{i=1}^{n}(c_i -n)$, the flow into $v_i$ must be equal to
+$r_i - n$, and the flow going out of $u_i$ must be equal to $c_i - n$. 
+Let $a_{ij} = f{ij} + 1$, where $f_{ij}$ is the flow through edge between $v_i$ and $u_j$. Then we
+have $a_{ij} \geq 1$, and $a_{ij} \leq M-1 + 1 \leq M$. Since the flow into $v_i$ is $r_i - n$, we
+have
+\begin{align}
+  r_i - n &= \sum_{j=1}^{n}f_{ij} = \sum_{j=1}^{n}(a_{ij} - 1) \\
+  r_i &= \sum_{j=1}^{n}a_{ij} 
+\end{align}
+Similarly since the flow going out of $u_j$ is $c_j - n$, we have 
+\begin{align}
+  c_j - n &= \sum_{i=1}^{n}f_{ij} = \sum_{i=1}^{n}(a_{ij} - 1) \\
+  c_j &= \sum_{i=1}^{n}a_{ij} 
+\end{align}
+Therefore the matrix we construct satisfies all constraints. Hence Claim is proved.
 
+In conclusion, we have proved the correctness of the proposed algorithm.
 
 \Complexity
-
+The time used to construct the graph $G$ is $O(n^2)$. And to find the maximum flow in the graph, we
+could apply \textit{Edmonds-Karp} algorithm, and the time complexity is $O(|V||E|^2)$, that is
+$O(n^5)$. Therefore the time complexity of the proposed algorithm is $O(n^5)$.
 
 \section*{Problem 4: Database projections}
 
