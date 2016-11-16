@@ -353,7 +353,18 @@ permutations to cover all $k$ subsets, the relationship $S_{C_i} \subseteq S_{C_
 decrease the number of permutations needed by $1$. Since the capacity of the maximum is $T$, it
 means that there are $T$ such paths, so we could use $k-T$ permutations to finish the required task.
 
-Following we show that we couldn't finish the task with less than $k-T$ permutations.   
+Following we show that we couldn't finish the task with less than $k-T$ permutations. Suppose now we
+could use $k - T^*$ permutations to finish the task and $T^* > T$. We know that there are $T^*$
+subsets $S_{C_i}$ such that there exists ${C_{i+1}}$ satisfying $S_{C_i} \subseteq S_{C_{i+1}}$. In
+this we can get a flow with $s \rightarrow A_{C_i} \rightarrow B_{C_{i+1}} \rightarrow t$. So the
+maximum flow would be $T^*$, which forms a contradiction. Hence we cannot finish the task with less
+than $k-T$ permutations.
+
+\Complexity
+To determine whether $S_i$ is a subset of $S_j$ for all pairs of subset, the time complexity is 
+$O(nk^2)$. To construct the graph, time complexity is $O(k^2)$. To find the maximum flow in the
+graph with \textit{Edmonds-Karp} algorithm, the time complexity is $O(|V||E|^2)$, that is $O(k^5)$.
+In conclusion, the time complexity of the proposed algorithm is $O(\max(k^5, n^k))$.
 
 \section*{Problem 5: Maximum likelihood points of failure}
 
