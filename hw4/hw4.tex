@@ -318,6 +318,42 @@ could apply \textit{Edmonds-Karp} algorithm, and the time complexity is $O(|V||E
 $O(n^5)$. Therefore the time complexity of the proposed algorithm is $O(n^5)$.
 
 \section*{Problem 4: Database projections}
+For each pair of $S_i$ and $S_j$, we determine whether $S_i \subseteq S_j$ or $S_j \subseteq
+S_i$. Then we construct a graph $G$ as following: for each subset $S_i$, we add a node $v_i$. And if $S_i
+\subseteq S_j$, we add a directed edge from $v_i$ to $v_j$. Let $V$ be the set of vertices in $G$.
+
+We further construct a network graph $G^*$ as following:
+\begin{enumerate}
+  \item Add a source node $s$ and a sink node $t$ to $G^*$.
+  \item For each node $v_i \in V$, we add a node $A_i$ and $B_i$ to $G^*$.
+  \item Add an edge from $s$ to $A_i$ with a capacity of $1$.  
+  \item Add an edge from $B_i$ to $t$ with a capacity of $1$.
+  \item If $S_i \subseteq S_j$, we add an edge from $A_i$ to $B_j$ with a capacity of $1$.   
+\end{enumerate}
+
+After constructing graph $G^*$, we can calculate the maximum flow of the network graph, and let $T$
+be the capacity of the maximum flow. 
+
+If $k - T > l$, then there is no solution available. 
+
+If $k-T \leq l$, there exists a permutation satisfying the requirements. To get the permutations we
+want, each path like $s \rightarrow A_{C_i} \rightarrow A_{C_{i+1}} \rightarrow t$ in the maximum
+flow, we have $S_{C_i} \subseteq S_{C_{i+1}}$, and then we can get a chain like $S_{C_{1}} \subseteq
+S_{C_2} \subseteq \dots \subseteq S_{C_n}$, and to get a permutation for the chain, we first add
+columns in $S_{C_1}$ and then add the columns that is still not covered. Do this step for all
+remaining subsets, and finally add the columns that are still missing to get a complete permutation.          
+
+
+\Proof
+First we show that we could use $k-T$ permutations to finish the task. For each path like $s
+\rightarrow A_{C_i} \rightarrow B_{C_{i+1} \rightarrow 1}$, it contributes a flow of $1$ to the
+maximum flow. Also since $S_{C_i} \subseteq S_{C_{i+1}}$, we could construct a single permutation
+such that i$S_{C_i}$ and $_{C_{i+1}}$ constitute a prefix for it. Obviously we could use $k$
+permutations to cover all $k$ subsets, the relationship $S_{C_i} \subseteq S_{C_{i+1}}$ enable us to
+decrease the number of permutations needed by $1$. Since the capacity of the maximum is $T$, it
+means that there are $T$ such paths, so we could use $k-T$ permutations to finish the required task.
+
+Following we show that we couldn't finish the task with less than $k-T$ permutations.   
 
 \section*{Problem 5: Maximum likelihood points of failure}
 
