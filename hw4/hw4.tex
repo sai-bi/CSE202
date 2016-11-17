@@ -95,10 +95,7 @@
 We solve this problem by network flow. We construct the graph $G$ as following:
 \begin{enumerate}
   \item  For each job $j$, we create a node $v_j$. 
-  \item  For each processor $i$, we add a node $g_i$.
-  % \item  For time covered by all segments $[t_i, t_i']$, we divide it into partitions $T_1, T_2,
-    % \dots, T_p$ such that $T_i \cap T_j = \emptyset$ and $\cup_{i} T_i = \cup_i [t_i, t_i']$, also
-    % when we get the partitions, if $T_i$ contains the start point of a job $a_i$ or a deadline  
+  % \item  For each processor $i$, we add a node $g_i$.
   \item We put all the timestamp $t_i$, $t_i'$, $a_i$, $a_i + \ell_i$ and $d_i$ on the time axis, so that we can
     divide all the time segments into partitions $T_1, T_2, \dots, T_p$ such that  $T_i \cap T_j = \emptyset$ 
     and $\cup_{i} T_i = \cup_i [t_i, t_i']$. For each $T_i$, we add a node $u_i$. 
@@ -106,16 +103,19 @@ We solve this problem by network flow. We construct the graph $G$ as following:
   \item  We add a source node $s$ and a sink node $t$. 
   \item We add a directed edge between source node $s$ and node $v_j$, and the capacity is set to
     $\ell_j$.
-  \item We add a directed edge between processor node $g_i$ and sink node $s$, and the capacity is
-    set to $|t_i' - t_i|$. For each $T_i$, we add a node $u_p$.
+  % \item We add a directed edge between processor node $g_i$ and sink node $s$, and the capacity is
+    % set to $|t_i' - t_i|$. For each $T_i$, we add a node $u_p$.
+  \item We add a directed edge from time node $u_i$ to sink node $s$, and the capacity is $p|T_i|$,
+    where $p$ is the number of processors that are available during this time interval.
+
   \item For each node $v_j$ and $u_p$, let $T_p= [A_p, A_{p+1}]$, if $a_j \leq A_{p}$ and $d_j >
     A_{p+1}$, 
     we add an edge between $v_j$
     and $u_p$ with a capacity of $|T_p|$. In this way, we can guarantee that the job cannot be assigned
     to a processor before it arrives and after the deadline passes.
 
-  \item For each node $u_p$ and $g_i$, if processor $g_i$ is available at $T_p$, we add an edge between $u_p$ and
-    $g_i$, and the capacity of the edge is set to $T_p$. 
+  % \item For each node $u_p$ and $g_i$, if processor $g_i$ is available at $T_p$, we add an edge between $u_p$ and
+    % $g_i$, and the capacity of the edge is set to $T_p$. 
 \end{enumerate}
 
 Given above formulation, we can find the maximum flow of the network with \textit{Edmonds-Karp}
@@ -124,10 +124,12 @@ flow is equal to the sum of lengths of all jobs $\sum_{j} \ell_j$, then we know 
 all be completed. Otherwise, the jobs cannot be completed. 
 
 To determine a proper scheduling when the
-jobs can all be completed, suppose there is an edge with capacity $T$ between $v_j$ and $u_p$, and
-there is also an edge between $u_p$ and $g_i$ with capacity $T$,  
-we know at time interval $T$ that job $v_j$ can be assigned to processor $g_i$. Afterwards we delete these
-two edges and determine scheduling in similar ways for remaining jobs and time units.
+jobs can all be completed, suppose there is an edge with capacity $T$ between $v_j$ and $u_p$, 
+% and there is also an edge between $u_p$ and $g_i$ with capacity $T$,  
+we know at time interval $T$ that job $v_j$ can be assigned to any processor that is available
+any this interval, and then we mark this processor as inavailable and do the scheduling for
+remaining jobs and time intervals.    
+% Afterwards we delete these two ed and do the scheduling for remaining jobs and time intervals.ges and determine scheduling in similar ways for remaining jobs and time units.
 
 \Proof
 First we prove that an integral flow through the graph produces a valid scheduling. We have the
@@ -138,14 +140,18 @@ following:
   \item We only add edge between job $v_j$ and the time $T_p$ where $a_j \leq A_p$ and $d_j >
     A_{p+1}$, so the
     job can only be assigned to a time unit that is after its arrival time and before its deadline.
-    Also since we only add edge between $u_p$ and $g_i$ when processor $i$ is available at time $T_p$,
-    which makes sure that a job can only be assigned to a processor at a time when the processor is
-    available. 
+    % Also since we only add edge between $u_p$ and $g_i$ when processor $i$ is available at time $T_p$,
+    % which makes sure that a job can only be assigned to a processor at a time when the processor is
+    % available. 
     Also since all time interval don't intersect, we guarantee that a job can only be assign to a
     processor at a time unit. 
-  \item By setting the capacity of edge between $g_i$ and $t$ to the length of interval where the
-    processor is available, we guarantee that the scheduling will not exceed the available interval
-    of processors.
+  % \item By setting the capacity of edge between $g_i$ and $t$ to the length of interval where the
+    % processor is available, we guarantee that the scheduling will not exceed the available interval
+    % of processors.
+  \item
+  Also since the edge from $u_p$ to sink node $t$ has capacity $p|T_p|$, which guarantees that the
+  jobs that are assigned to this time interval won't exceed the total amount of processor time
+  available at this interval. 
 \end{enumerate}
 Given above proofs, we know that all constraints in the problems are met. So the flow produced
 must be a valid scheduling.  
@@ -161,10 +167,9 @@ In conclusion, we have proved that the proposed algorithm is correct.
 
 \Complexity
 The number of time nodes in the graph is $O(n+k)$. To construct the graph, the time needed is 
-$O(|V|) + O(|E|)$, where $|V| = O(n+k), |E| = O(nk(n+k))$. So the time complexity of constructing
-graph is $O(nk(n+k))$. The time complexity to find maximum flow with \textit{Edmonds-Karp} algorithm
-is $O(|V||E|^2)$. So the time complexity of the proposed algorithm is $O(|V||E|^2)$, where  
-$|V| = O(n+k), |E| = O(nk(n+k))$.
+$O(|V|) + O(|E|)$, where $|V| = O(n+k), |E| = O(n(n+k))$. So the time complexity of constructing
+graph is $O(n(n+k))$. The time complexity to find maximum flow with \textit{Edmonds-Karp} algorithm
+is $O(|V||E|^2)$. So the time complexity of the proposed algorithm is $O(n^2(n+k)^3)$.
 
 
 \section*{Problem 2: Graph cohesiveness}
@@ -379,7 +384,7 @@ than $k-T$ permutations.
 To determine whether $S_i$ is a subset of $S_j$ for all pairs of subset, the time complexity is 
 $O(nk^2)$. To construct the graph, time complexity is $O(k^2)$. To find the maximum flow in the
 graph with \textit{Edmonds-Karp} algorithm, the time complexity is $O(|V||E|^2)$, that is $O(k^5)$.
-In conclusion, the time complexity of the proposed algorithm is $O(\max(k^5, n^k))$.
+In conclusion, the time complexity of the proposed algorithm is $O(\max(k^5, nk^2))$.
 
 \section*{Problem 5: Maximum likelihood points of failure}
 \Algorithm
@@ -392,7 +397,7 @@ First, we construct a graph $G$ as following:
   \item If there is an edge from $v_i$ to $t$ in the network, we add an edge from $B_i$ to $t$ with
     a capacity of $+\infty$.
   \item Add an edge between $A_i$ and $B_i$ with a capacity of $-\log p_i$.  
-  \item For each edge $(v_i, v_j)$ in the network, we add an edge between $B_i$ and $A_j$ with a
+  \item For each edge $(v_i, v_j)$ in the network, we add an edge between $A_i$ and $B_j$ with a
     capacity of $+\infty$.   
 \end{enumerate}
 
@@ -401,7 +406,7 @@ the failure point with maximum failure possibility would be $F = \{v_i | (A_i, B
 
 \Proof
 Since $C(S, T)$ is a minimum cut of $G$, then the only edges that go out $S$ could be $(A_i,
-B_i$, since all other edges have a capacity of $+\infty$. By definition of minimum cut, we know that
+B_i)$, since all other edges have a capacity of $+\infty$. By definition of minimum cut, we know that
 by removing edges in $C(S, T)$ will disconnect source and sink, which also implies that after
 removing vertices in $F$ source and sink will also be disconnected. Also we have the following
 \begin{align}
