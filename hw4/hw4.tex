@@ -140,14 +140,8 @@ following:
   \item We only add edge between job $v_j$ and the time $T_p$ where $a_j \leq A_p$ and $d_j >
     A_{p+1}$, so the
     job can only be assigned to a time unit that is after its arrival time and before its deadline.
-    % Also since we only add edge between $u_p$ and $g_i$ when processor $i$ is available at time $T_p$,
-    % which makes sure that a job can only be assigned to a processor at a time when the processor is
-    % available. 
     Also since all time interval don't intersect, we guarantee that a job can only be assign to a
     processor at a time unit. 
-  % \item By setting the capacity of edge between $g_i$ and $t$ to the length of interval where the
-    % processor is available, we guarantee that the scheduling will not exceed the available interval
-    % of processors.
   \item
   Also since the edge from $u_p$ to sink node $t$ has capacity $p|T_p|$, which guarantees that the
   jobs that are assigned to this time interval won't exceed the total amount of processor time
