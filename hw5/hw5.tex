@@ -92,7 +92,34 @@
 \maketitle \thispagestyle{empty}
 \section*{Problem 1: Hamiltonian Path}
 \Algorithm
+Let $V'$ be a set of vertices statisfying $V' \subset V$. We use $M(V', i, j)$ to denote whether
+there is a Hamiltonian path from $v_i \in V'$ to $v_j \in V'$ in the graph that only contains vertices in $V'$ and
+edges between vertices in $V'$. For initialization, starting from the set $V'$ that contains only $1$ vertex, we set 
+$M(V', i, i), |V'| = \{v_i\}$ to \textit{true}. For others, we set $M(V', i, j)$ to true if and only if there exists
+a vertex $v_k \in V' - {v_i}$ and there is an edge between $v_i$ and $v_k$, and there is an
+Hamiltonian path from $v_k$ to $v_j$, that is $M(V' - \{v_i\}, k, j)$ is true.
+And there is a Hamiltonian path from $v_1$ to $v_n$ if and
+only if $M(V, 1, n)$ is true.  
 
+\Proof
+We prove the following claim: $M(V', i, j)$ is true if and only if there exists a vertex $v_k \in 
+V' - \{v_i\}$ and there is an edge between $v_i$ and $v_k$ and also there is a Hamiltonian path from
+$v_k$ to $v_j$, that is $M(V' - \{v_i\}, k, j)$ is true.  
+
+If there is a vertex $v_k$, and there is an edge between $v_i$ and $v_k$, and there is a Hamiltonian
+path from $v_k$ to $v_j$. Obviously there is a Hamiltonian path in $V'$, and we can get it by
+simply add the edge $(v_i, v_k)$ to the Hamiltonian path from $v_k$ to $v_j$.   
+
+Conversely, if $M(V', i, j)$ is true, that is, there is a Hamiltonian path from $v_i$ to $v_j$ in
+$V'$, suppose that in the Hamiltonian path, the vertex that comes after $v_i$ is $v_k$. Obviously
+$v_k \in V' - \{v_i\}$, there is an edge between $v_i$ and $v_k$, and the path from $v_k$ to $v_j$
+is a Hamiltonian path of set $V' - \{v_i\}$. That is, $M(V' - \{v_i\}, k, j)$ is true.  
+
+In summary the claim is true. By induction we can easily prove the correctness of the proposed
+algorithm.
+\Complexity
+There are in total $2^n$ subsets, so there are $2^n \dot n \dot n$ triples like $M(V', i, j)$.
+To determine whether $M(V', i, j)$ is true, it takes $O(n)$ time since for each $v_k \in V' - \ 
 
 \end{document}
 
