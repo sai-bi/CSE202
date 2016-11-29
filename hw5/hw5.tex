@@ -117,9 +117,12 @@ is a Hamiltonian path of set $V' - \{v_i\}$. That is, $M(V' - \{v_i\}, k, j)$ is
 
 In summary the claim is true. By induction we can easily prove the correctness of the proposed
 algorithm.
-\Complexity
-There are in total $2^n$ subsets, so there are $2^n \dot n \dot n$ triples like $M(V', i, j)$.
-To determine whether $M(V', i, j)$ is true, it takes $O(n)$ time since for each $v_k \in V' - \ 
 
+\Complexity
+There are in total $2^n$ subsets, so there are $2^n \cdot n \cdot n$ triples like $M(V', i, j)$.
+To determine whether $M(V', i, j)$ is true, it takes $O(n)$ time since for each $v_k \in V' -
+\{v_i\}$ we need to check whether there is an edge between $v_i$ and $v_k$ and also the value of 
+$M(V' - \{v_i\}, k, j)$. Therefore the time complexity of the proposed algorithm is $O(2^n \cdot
+n^3)$.
 \end{document}
 
