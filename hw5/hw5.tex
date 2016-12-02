@@ -130,7 +130,21 @@ Let $r$ be the root of the tree. For each node $v$ in the tree, let $T_v$ be the
 that node. Let $MC(v, k)$ be the maximum cut of subtree $T_v$ when the set that contains $v$ has
 exactly $k$ nodes. Therefore we are trying the determine the value of $MC(r, \frac{n}{2})$.
 
-Now we consider a node $v$, when it has only one children $v_l$. Let $()$
+For a leaf node $v$, obviously we know that $k$ can only be $1$, therefore $MC(v, 1) = 0$ for every
+leaf node $v$.
+
+For a non-leaf node $v$, suppose $v$ has only one child $u$. Let $(A, B)$ be a maximum tree cut for
+$T_v$ and $A$ is the set that contains $v$. We have two possible cases:
+\begin{enumerate}
+  \item If $u \in A$, in this case we must have $MC(v, k) = MC(u, k-1)$.
+  \item If $u \notin A$, in this case we must have $MC(v, k) = c(v, u) + MC(u, |T_u| - k + 1)$, where $|T_u|$
+    is the number of vertices in subtree $T_u$, and $c(v, u)$ is the cost of edge between $v$ and
+    $u$. 
+\end{enumerate}
+Therefore, $MC(v, k)$ is calculated as following:
+\begin{align}
+MC(v, k) = \max(MC(u, k-1), MC(u, |T_u| - k + 1) + c(v, u))
+\end{align}
 
 % \begin{align}
 % E(T_k, q) = & \frac{1}{N_T}\sum_{i=1}^{m}\big[S_{k}(p_i) - T_k(q)\big]^2 + \alpha \cdot \frac{1}{N_S}\sum_{j=1}^{n}\big[\hat{S}_{k}(p_j) - T_k(q)\big]^2  \\
