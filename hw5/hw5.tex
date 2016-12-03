@@ -13,7 +13,7 @@
 % \newcommand{\ClassInstructor}{Russell Impagliazzo}
 
 % Homework Specific Information. Change it to your own
-\newcommand{\Title}{Homework 3}
+\newcommand{\Title}{Homework 4}
 \newcommand{\StudentName}{Sai Bi}
 \newcommand{\StudentClass}{}
 \newcommand{\StudentNumber}{}
@@ -126,9 +126,10 @@ $M(V' - \{v_i\}, k, j)$. Therefore the time complexity of the proposed algorithm
 n^3)$.
 
 \section*{Problem 2}
+\Algorithm
 Let $r$ be the root of the tree. For each node $v$ in the tree, let $T_v$ be the subtree rooted at 
 that node. Let $MC(v, k)$ be the maximum cut of subtree $T_v$ when the set that contains $v$ has
-exactly $k$ nodes. Therefore we are trying the determine the value of $MC(r, \frac{n}{2})$.
+exactly $k$ nodes. Therefore we are trying the determine the value of $MC(r, \frac{|V|}{2})$.
 
 For a leaf node $v$, obviously we know that $k$ can only be $1$, therefore $MC(v, 1) = 0$ for every
 leaf node $v$.
@@ -145,6 +146,124 @@ Therefore, $MC(v, k)$ is calculated as following:
 \begin{align}
 MC(v, k) = \max(MC(u, k-1), MC(u, |T_u| - k + 1) + c(v, u))
 \end{align}
+
+Now we consider the case where $v$ has two children $u$ and $w$. Since edges only exist between
+nodes on the same subtree, so we can calculated the maximum cut for $T_u$ and $T_w$ separately, and
+then add them together to get the maximum cut for $T_v$. Here
+we need to consider every possible way to divide $k-1$ nodes to $T_u$ and $T_w$. Suppose we
+divide $n_u$ nodes to $T_u$, and $n_w = k - 1 - n_u$ nodes to $_w$. Then the maximum cut would be
+\begin{align}
+  MC(v, k) = & \max_{0 \leq n_u \leq k-1, n_w = k-1 -n_u} \Big( \max(MC(u, n_u), MC(u, |T_u| - n_u 
+  ) + c(v, u)) \\
+  & + \max(MC(w, n_w), MC(w, |T_u| - n_w) + c(v, w))
+  \Big)
+\end{align}
+
+Given this induction relationship, we can compute all values of $MC(v, k)$ staring from the leaf
+node, and finally output the value of $MC(r, |V| / 2)$ as the maximum cut of $T$.
+
+\Proof
+We have prove the correctness of the induction relationship. Considering the properties of dynamic
+programming, the correctness of the proposed algorithm is obvious.
+
+\Complexity
+To get the value of $MC(v, k)$, it takes $O(k)$ time. The maximum value of $k$ is $|T_v|$, where
+$|T_v|$ is the number of nodes in subtree $T_v$. So for each vertex $v$, it takes $O(|T_v|^2)$.
+Therefore the total complexity of the proposed algorithm is $O(|V|^3)$.
+
+\section*{Problem 3: Heaviest first}
+\subsection*{1}
+\Proof
+If $v\not\in S$, it means that $v$ is deleted in some iteration when the algorithm selects some node
+$v'$ which is a neighbour of $v$, which implies that $v'$ must have a weight that is larger than or
+equal to that of $v$. Therefore, the claim holds.
+
+\subsection*{2}
+Let $W(S^*)$ be the weight of the optimal independent set $S^*$, and let $W(S)$ be the weight of set
+$S$. For each $v \in S^*$, we define $v'$ as following:
+\begin{enumerate}
+  \item If $v \in S$, $v'= v$.
+  \item If $v \not\in S$, $v'$ is an neighbour of $v$ in $S$. And we have $w(v') \geq w(v)$. 
+\end{enumerate}
+
+Given this definition, since each $u \in S$ can have at most $4$ neighbours in $S^*$, we have the following relationship:
+\begin{align}
+  W(S^*) & = \sum_{v \in S^*} w(v) \\ 
+  & \leq \sum_{v', v \in S^*} w(v')  \\
+  & \leq 4 \sum_{u \in S} w(u) \\
+  & = 4W(S)
+\end{align}
+Therefore, the heaviest-first greedy algorithm returns an independent set of total weight at least 
+$\frac{1}{4}$ times the maximum total weight of any independent set in the grid graph $G$.
+
+
+\section*{Problem 4}
+
+\subsection*{1}
+Suppose now we have $n$ bins, it takes $\frac{n(n-1)}{2}$ operations to calculate the sum of each
+pair, and for each operation we need to calculate the sum of weight of a pair, and compare it with
+$W$, which has time complexity of $\log(2 \max(W, \max \{w_i\}))$ (bit operations).
+
+Hence the time complexity of the algorithm can be calculated as following:
+\begin{align}
+  \sum_{i = 2}^{n} \frac{i(i-1)}{2} \log(2 \max (W, \max \{w_i\})) \leq (n + \log W + \sum_{i=1}^{n}
+  \log w_i)^3
+\end{align}
+Therefore the
+merging heuristic always terminates in time polynomial in the size of the input.
+
+\subsection*{2}
+The weight of each item is $5, 6, 3, 2, 1$, and $W = 10$. If we first merge the last three items
+together, then it will be $5, 6, 6$, which needs $3$ bins. However, we could use two bins by putting
+$5, 3$ together and $6, 2, 1$ together.
+
+\subsection*{3}
+Suppose that when the algorithm terminates, there are $N$ bins. Obviously we have for any bin $i$
+and $j$, we must have $w_i + w_j > W$. So $\sum_{i=1}^{N} w_i > W * \frac{N}{2}$.
+
+Now assume that we could use less than $\frac{N}{2}$ bins to finish this task. Since the weight in
+each bin must be less than or equal to $W$, the total weight of items must be less than or equal to 
+$\frac{WN}{2}$, which forms a contradiction. 
+
+Hence the number of bins used in the
+packing returned by the heuristic is at most twice the minimum possible number of bins.
+
+\section*{Problem 5: Maximum coverage}
+\Proof
+The greedy algorithm works as following: in each iteration, we pick the set where the total weight
+of uncovered elements is maximal. Repeat this until all $k$ sets are picked. 
+
+Let $OPT$ be the weight of the optimal solution to this problem.
+Let $x_i$ be the weight of new elements covered by greed algorithm in the $i$-th set it picks. Also
+let $y_i = \sum_{j=1}^{i}x_i$, and $z_i = OPT - y_i$.  
+
+\textbf{Claim 1:} $x_{i+1} \geq \frac{z_i}{k}$.
+
+\textbf{Proof:}
+Optimal solution covers a weight of $OPT$ within $k$ iterations. That means, at each iteration,
+there should some set $U$ whose weight of uncovered elements is greater than or equal to
+$\frac{1}{k}$
+of the remaining uncovered elements, that is $\frac{z_i}{k}$. Otherwise it is impossible for the
+optimal solution to cover a weight of $OPT$ in $k$ steps. Since the greedy algorithm always chooses
+the set where the weight of uncovered elements is maximal, the chosen set at each iteration should
+be at least $\frac{1}{k}$ of the remaining uncovered elements. That is, $x_{i+1} \geq \frac{z_i}{k}$.
+
+\textbf{Claim 2:} $z_{i+1} \leq (1 - \frac{1}{k})^{i+1} \cdot OPT$
+We prove this by induction. When $i = 0$, obviously it holds.
+
+Assume that it holds for $i = p - 1$, that is $z_{p} \leq (1 - \frac{1}{k})^{p} \cdot OPT$. When $i
+= p$, we have
+\begin{align}
+  z_{p+1} & = z_{p} - x_{p+1} \\
+  &\leq z_{p} - \frac{1}{k} z_{p} \\
+  &\leq (1 - \frac{1}{k})z_p \\
+  & \leq (1 - \frac{1}{k})^{p+1} \cdot OPT
+\end{align}
+By induction, we know that the claim holds.
+
+Given above claims, we have $z_k \leq (1 - \frac{1}{k}) ^k \cdot OPT \leq \frac{OPT}{e}$. Therefore
+we have $y_k = OPT - z_k \geq (1 -  \frac{1}{e}) \cdot OPT$.
+
 
 % \begin{align}
 % E(T_k, q) = & \frac{1}{N_T}\sum_{i=1}^{m}\big[S_{k}(p_i) - T_k(q)\big]^2 + \alpha \cdot \frac{1}{N_S}\sum_{j=1}^{n}\big[\hat{S}_{k}(p_j) - T_k(q)\big]^2  \\
