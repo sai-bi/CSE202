@@ -72,7 +72,7 @@
 
 \newcommand{\Answer}{\ \\\textbf{Answer:} }
 \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
-\newcommand{\Complexity}{\vspace{0.3cm} \noindent\textbf{Time Complexity} \\}
+\newcommand{\Complexity}{\vspace{0.3cm} \noindent\textbf{Time Complexity} \vspace{0.2cm} \\}
 \newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof of correctness} \vspace{0.2cm} \\}
 \newcommand{\Algorithm}{\textbf{Algorithm} \vspace{0.2cm}\\}
 \newcommand{\EndProof} { \hfill$\square$ }
@@ -161,7 +161,7 @@ We have the following:
 \begin{enumerate}
   \item $W(v, v) = w(v) + \sum_{u \in C_v} \min(W(u, v), W(u, u))$. 
   \item $W(v, a) = w(v) - w(a) + \sum_{u \in C_v} \min( W(u, u), W(u, a))$, where $a$ is an ancestor of
-    $v$.
+    $v$, and $a$ is a pivot vertex.
 \end{enumerate}
 
 For base case, if $v$ is a leaf node, we have $W(v, v) = w(v)$, and $W(v, a) = w(v) - w(a)$. We
@@ -170,6 +170,10 @@ descendent-ancestor pair $v$ and $a$.
 
 Finally we return $W(r, r)$ where $r$ is the root node, as the minimum total cost.
 
+To get a optimal assignment of vertices, we make root $r$ a pivot vertex. And then we backtrack
+to determine the optimal assignment of other vertices, and assume that $W(u, v) < W(u, u)$ we will
+make $u$ a regular vertex, otherwise we will make $u$ a pivot vertex.  
+ 
 \Proof
 Following we prove the correctness of the induction relationship. 
 
@@ -193,7 +197,64 @@ the cost of subtree $T_u$ would be $W(u, a)$ since $a$ is the closest ancestor o
 $u$ is a pivot vertex, the cost of subtree $T_u$ would be $W(u, u)$. To minimize the cost, obviously we have  
 $W(v, a) = w(v) - w(a) + \sum_{u \in C_v} \min( W(u, u), W(u, a))$.
 
-\textbf{Claim 3:}
+In addition, we can safely assume that root $r$ is a pivot vertex. Because assigning $r$ to be a
+regular vertex will not reduce the cost of $r$ since $r$ has no ancestors, and will also not reduce
+cost of any of its descendents. 
+
+Therefore $M(r, r)$ must be the minimum cost.  
+
+\Complexity
+For a vertex $a$, to calculate $W(v, a)$, the time complexity is $O(|C_v|)$. Therefore to calculate
+$W$ for all  descendent-ancestor pairs, the time complexity is $O(|V|^2)$.
+
+
+\section*{Problem 3: Electronic message transmission systems}
+\Algorithm
+We build a graph $G = (V, E)$ as following:
+\begin{enumerate}
+  \item Add a source node $s$ and a sink node $t$ to $G$.
+  \item For each site $i$, we add a node $v_i$ to $G$.
+  \item For each pair of sites $i, j, i\neq j$, we add a node $v_{ij}$ to $G$
+  \item Add an edge from $s$ to $v_{ij}$ with capacity $s_{ij}$.
+  \item Add an edge from $v_i$ to $t$ with capacity $c_i$.
+  \item Add an edge from $v_{ij}$ to $v_i$ with capacity $+\infty$.
+  \item Add an edge from $v_{ij}$ to $v_j$ with capacity $+\infty$.
+\end{enumerate}
+
+Given graph $G$, we apply \textit{Push-relabel} algorithm to find a minimum cut $C = (S, T)$ of $G$,
+where $s \in S, t \in T$. Then the capacity of $C$ is the maximum sum of the edge
+revenues less the vertex costs. And the site we choose are those in the set $\{v_i | v_i \in S\}$ 
+
+\Proof
+\textbf{Claim 1:}: $v_{ij} \in S$ if and only if $v_i \in S$ and $v_j \in S$.
+
+\textbf{Proof:} If $v_{ij} \in S$, assume $v_i \not\in S$, then $v_i \in T$. Since there is an edge
+from $v_{ij}$ to $v_i$ with capacity $+\infty$, obviously we know that the capacity of cut $C$ will
+be $+\infty$, which is not minimum and contradicts with the fact. Therefore $v_i$ must be in $S$.
+Similarly we could prove that $v_j \in S$.
+
+If $v_i \in S, v_j \in S$, to get to $v_i$ and $v_j$ from $s$, we have to go through $v_{ij}$, since
+$v_i$ and $v_j$ are only connected to $v_{ij}$. Therefore $v_ij \in S$.
+
+Given Claim 1, we know that the only edges from $S$ to $T$ are either edges from $s$ to $v_{ij} \in
+T$, or edges from $v_i \in S$ to $t$. Therefore the capacity of the cut could be calculated as
+following:
+
+\begin{align}
+  |C| & = \sum_{v_{ij} \in T} c(s, v_{ij}) + \sum_{v_i \in S} c(v_i, t) \\
+  & = \sum_{v_{ij} \in V} c(s, v_{ij}) - \sum_{v_{ij} \in S} c(s, v_{ij}) + \sum_{v_i \in S} c(v_i,
+  t) 
+\end{align}
+
+Since $\sum_{v_{ij} \in V} c(s, v_{ij})$ is fixed, by minimizing $|C|$, we are minimizing 
+$-\sum_{v_{ij} \in S} c(s, v_{ij}) + \sum_{v_i \in S} c(v_i,t)$, which is exactly the set of
+vertices that achieves maximal sum of the edge
+revenues less the vertex costs.
+  
+\Complexity
+To build the graph, the time complexity is $(|V|^2)$. And to find the minimum cut with
+\textit{Push-relabel} algorithm, the time complexity is $O(|V|^2|E|)$. Therefore the time complexity
+of the proposed algorithm is $O(|V|^4)$.
 
 \end{document}
 
