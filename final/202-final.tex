@@ -256,6 +256,60 @@ To build the graph, the time complexity is $(|V|^2)$. And to find the minimum cu
 \textit{Push-relabel} algorithm, the time complexity is $O(|V|^2|E|)$. Therefore the time complexity
 of the proposed algorithm is $O(|V|^4)$.
 
+\section*{Problem 4: Maximizing the benefit of unreachable nodes}
+\Algorithm
+First we construct a new graph $G' = (V', E')$ as following:
+\begin{enumerate}
+  \item Initially we create a copy of $G$ and make it $G'$.
+  \item Change node $r$ to a source node $s$ in $G'$,  
+  \item Add a sink node $t$ to $G'$.
+  \item For any edge $e'$ in $G'$ set its capacity equal to $c_e$.
+  \item For any node $v \in G', v \neq s, v\neq t$, add an edge from $v$ to $t$ with capacity
+    equal to $b_v$.
+\end{enumerate}
+
+Given graph $G'$, we calculate a minimum cut $C = (S, T)$ where $s \in S, t \in T$, and then the set
+of edges attackers should destroy are $A = \{(u, v) | u \in S, v \in S, (u, v) \in E \}$. 
+
+%\Proof
+% We are trying to maximize the benifits of disonnecting vertices less the costs of destorying edges.
+% Let $(S, T)$ a cut of graph $G'$, if we destory all edges in  $A = \{(u, v) | u \in S, v \in S, (u,
+% v) \in E' \}$, then the cost is $C(S, T)$, which is the capacity of the cut. And the benefit
+% is the sum of benifits of vertices disconnected from $s$ ($r$). Therefore we have:
+% \begin{align} 
+  % & \max\sum_{v \in T} b_v  - C(S, T) \\
+  % \Leftrightarrow & \min C(S, T) - \sum_{v \in T} b_v \\
+  % \Leftrightarrow & \min C(S, T) + \sum_{v \in S} b_v 
+% \end{align}
+\Proof
+By definition of graph cut, we have:
+\begin{align}
+  C(S, T) = \sum_{(u, v) \in E', u \in S, v\in T} c(u, v)
+\end{align}
+Here there are two kinds of edges. The first kind of edges are those exist in $E$, and we denote
+them as $E_1$, and the second kind of edges are the edges we add from $v$ to $t$, and we denote them
+as $E_2$. Therefore we have:
+\begin{align}
+  C(S, T) & = \sum_{(u, v) \in E', u \in S, v\in T} c(u, v) \\
+  & = \sum_{(u, v) \in E_1} c(u, v) + \sum_{(v, t) \in E_2} b_v \\
+  & = \sum_{(u, v) \in E_1} c(u, v) + \sum_{v \in S} b_v \\
+  & = \sum_{(u, v) \in E_1} c(u, v) + \sum_{v \in V', v \neq s, v \neq t} b_v  - \sum_{v \in T} b_v \\
+\end{align}
+Therefore by minimizing $C(S, T)$, since $\sum_{v \in V', v \neq s, v \neq t} b_v$ is fixed,  
+we are minimizing $ \sum_{(u, v) \in E_1} c(u, v) - \sum_{v \in T} b_v$, that is, we are maximizing 
+$ -\sum_{(u, v) \in E_1} c(u, v) + \sum_{v \in T} b_v$. For any $v \in T$, it is disconnected from
+$r = s$. Therefore $\sum_{v \in T} b_v$ are the benefits of vertices disconnected from $s$, while
+$\sum_{(u, v) \in E_1} c(u, v)$ is the costs of destroying edges. Hence by destroying edges in 
+$E_1$, or more formally destroying edges in  $A = \{(u, v) | u \in S, v\in T, (u, v) \in E\}$, we are
+maximizing the benefits of disconnecting vertices less the costs of destroying edges.  
+
+\Complexity
+To construct the graph, the time complexity is $O(|V| + |E|)$. And to find the minimum cut in $G'$,
+we apply \textit{Push-relabel} algorithm, and the complexity is $O(|V|^2|E|)$. Therefore the time
+complexity of the proposed algorithm is $O(|V|^4)$.
+
+\section*{Problem 5: IPO}
+
 \end{document}
 
 
