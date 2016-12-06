@@ -74,7 +74,7 @@
 \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
 \newcommand{\Complexity}{\vspace{0.3cm} \noindent\textbf{Time Complexity} \\}
 \newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof} \\}
-\newcommand{\Algorithm}{\textbf{Algorithm} \\}
+\newcommand{\Algorithm}{\textbf{Algorithm} \vspace{0.2cm}\\}
 \newcommand{\EndProof} { \hfill$\square$ }
 \newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,8 +90,68 @@
 
 \begin{document}
 \maketitle \thispagestyle{empty}
-\section*{Problem 1: }
+\section*{Problem 1: Always Non-negative Path}
+\Algorithm
+The algorithm works as following:
+\begin{enumerate}
+  \item For each vertex $v$, We use $P(v)$ to denote the maximum weight path from source $s$ to $v$.
+  Initially we set $P(s) = 0$, and for all other nodes we set $P$ to $-\infty$. 
+\item  \label{list:1} And we update $M(v)$
+    in a manner similar to \textit{Bellman-Ford} algorithm, that is, we iterate over all edges $e \in E$
+    for $|V|$ times, and for any edge $e = (u, v)$, if $P(u) + w(e) \geq 0$, we update value of $P(v) =
+    \max(P(v), P(u) + w(e))$.
+  \item Apply \textit{Depth-First-Search} (DFS) algorithm to find a positive weight cycle and for
+    all vertex $v$ on the cycle, set their $P(v) = +\infty$.
+  \item Repeat Step~\ref{list:1} to update value of $P$ for each vertex.
+  \item There is a non-negative path from $s$ to $t$ if and only if $P(t) \geq 0$.  
+\end{enumerate}
+
+
+\begin{minted}[frame=lines, framesep=2mm, escapeinside=??, mathescape=true]{cpp}
+function Main()
+Input: Graph G = (V, E), s, t
+Output: bool // whether there is a always non-negative path from s to t
+
+P(v) = ?$-\infty$? for any ?$v \in V, v \neq s$?
+P(s) = 0;
+
+BellmanFord();
+FindCycle();
+BellmanFord();
+
+return P(t) ?$\geq$? 0;
+\end{minted}
+
+
+\begin{minted}[frame=lines, framesep=2mm, escapeinside=??, mathescape=true]{cpp}
+function BellmanFord()
+for i = 1 : |V| {
+  for edge (u, v)  in E {
+    if P(u) + w(u, v) ?$\geq$? 0 {
+      P(v) = max(P(u) + w(u, v), P(v)) 
+    }
+  }
+}
+
+\end{minted}
+
+\begin{minted}[frame=lines, framesep=2mm, escapeinside=??, mathescape=true]{cpp}
+function FindCycle()
+S = new stack();
+S.push((s, 0));
+
+while ~S.empty() {
+  (v, m) = S.pop();
+  mark v as visited
+  for all edges (v, u) in E {
+    if P(v)
+  }
+}
+
+\end{minted}
+
 \end{document}
+
 
 
 
