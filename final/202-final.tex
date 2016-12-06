@@ -73,7 +73,7 @@
 \newcommand{\Answer}{\ \\\textbf{Answer:} }
 \newcommand{\Acknowledgement}[1]{\ \\{\bf Acknowledgement:} #1}
 \newcommand{\Complexity}{\vspace{0.3cm} \noindent\textbf{Time Complexity} \\}
-\newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof} \\}
+\newcommand{\Proof}{\vspace{0.3cm} \noindent\textbf{Proof of correctness} \vspace{0.2cm} \\}
 \newcommand{\Algorithm}{\textbf{Algorithm} \vspace{0.2cm}\\}
 \newcommand{\EndProof} { \hfill$\square$ }
 \newcommand\equ[1]{\begin{align}\begin{split} #1 \end{split} \end{align}}
@@ -149,6 +149,51 @@ while ~S.empty() {
 }
 
 \end{minted}
+
+\section*{Problem 2: Pivoting vertices}
+\Algorithm
+Let $T = (V, E)$. For a vertex $v \in V$, let $a$ be a ancestor of $v$. Let $T_v$ be the subtree
+rooted at $v$. Let $C_v = \{u | u \text{ is a child of } v\}$. Let $w(v)$ be the weight of $v$.
+
+We use $W(v, a)$ to denote the cost of subtree $T_v$ when $v$'s closest pivot ancestor is
+$a$. And $W(v, v)$ refers to the cost of subtree $T_v$ when $v$ is a pivot.   
+We have the following:
+\begin{enumerate}
+  \item $W(v, v) = w(v) + \sum_{u \in C_v} \min(W(u, v), W(u, u))$. 
+  \item $W(v, a) = w(v) - w(a) + \sum_{u \in C_v} \min( W(u, u), W(u, a))$, where $a$ is an ancestor of
+    $v$.
+\end{enumerate}
+
+For base case, if $v$ is a leaf node, we have $W(v, v) = w(v)$, and $W(v, a) = w(v) - w(a)$. We
+could go from leaf node and go to upper level and calculate the value of $W(v, a)$ for each
+descendent-ancestor pair $v$ and $a$. 
+
+Finally we return $W(r, r)$ where $r$ is the root node, as the minimum total cost.
+
+\Proof
+Following we prove the correctness of the induction relationship. 
+
+\textbf{Claim 1:}
+$W(v, v) = w(v) + \sum_{u \in C_v} \min(W(u, v), W(u, u))$. 
+
+\textbf{Proof:}
+If $v$ is a pivot vertex, obviously for any $u \in C_v$, if $u$ is a pivot vertex,
+then the cost of subtree $T_u$ would be $W(u, u)$. If $u$ is a regular vertex, the cost of subtree
+would be $W(u, v)$ because now $v$ is the closest pivot ancestor of $u$. So we have 
+$W(v, v) = w(v) + \sum_{u \in C_v} \min(W(u, v), W(u, u))$. 
+
+\textbf{Claim 2:}
+ $W(v, a) = w(v) - w(a) + \sum_{u \in C_v} \min( W(u, u), W(u, a))$, where $a$ is the closest ancestor of
+ $v$.
+
+\textbf{Proof:}
+In this case, obviously $v$ is not a pivot vertex, otherwise it turns into the case of $W(v, v)$.
+Then the cost of $v$ would be $w(v) - w(a)$. And for any $u \in C_v$, if $u$ is a regular vertex,
+the cost of subtree $T_u$ would be $W(u, a)$ since $a$ is the closest ancestor of $u$ now. And if 
+$u$ is a pivot vertex, the cost of subtree $T_u$ would be $W(u, u)$. To minimize the cost, obviously we have  
+$W(v, a) = w(v) - w(a) + \sum_{u \in C_v} \min( W(u, u), W(u, a))$.
+
+\textbf{Claim 3:}
 
 \end{document}
 
