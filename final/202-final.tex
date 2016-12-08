@@ -423,6 +423,38 @@ M(A', B') & \leq |E| = N(A, B) + M(A, B)\\
 
 Therefore we prove that the proposed algorithm is a factor $\frac{1}{2}$ approximation.
 
+Following we give an example for which the algorithm
+outputs a cut which only contains $\frac{1}{2}+\delta$ fraction of the edges compared to the cardinality of the optimal cut
+where $\delta > 0$ approaches zero as the number of vertices goes to infinity. We construct a graph
+$G$ as  following:
+
+
+\begin{enumerate}
+  \item Add a set of node $(x_1, x_2, \dots, x_n)$ to $G$.
+  \item For each $x_i$ and $x_{i+1}$, add an edge between them.
+  \item Add a set of node $(y_1, y_2, \dots, y_n)$ to $G$.
+  \item For each $y_i$ and $y_{i+1}$, add an edge between them.
+  \item For each pair of $x_i$ and $y_j$ where $ 1 \leq i \leq n, 1 \leq j \leq n$, add an edge
+    between them.
+\end{enumerate}
+
+Obviously the optimal maximum cut would be $A^* = (x_1, x_2, \dots, x_n)$, $B^* = (y_1, y_2, \dots,
+y_n)$, and the cardinality of maximum cut is $C(A^*, B^*) = n^2$.
+
+With the greedy algorithm, if we set $A = \{x_1\}, B = \{x_2\}$ initially, then the cut we get would
+be $A = (x_1, x_3, x_5, \dots, y_2, y_4, y_6, \dots)$, $B = (x_2, x_4, x_6, \dots, y_1, y_3, y_5,
+\dots)$. The cardinality of this cut is $C(A, B) = 2 \cdot \frac{n^2}{4} + 2 \cdot(n-1) =
+\frac{n^2}{2} + 2n -2$. Therefore we have:
+\begin{align}
+  \frac{C(A, B)}{C(A^*, B^*)} &= \frac{\frac{n^2}{2} + 2n -2}{n^2} \\ 
+  &= \frac{1}{2} + \frac{2}{n} - \frac{2}{n^2}
+\end{align}
+
+Obviously when $n$ approaches infinity, $\frac{C(A, B)}{C(A^*, B^*)}$ approaches $\frac{1}{2}$,
+$\delta$ approaches $0$. The upper bound of $\frac{C(A, B)}{C(A^*, B^*)}$ is $1$, which is got when
+$n = 2$.
+
+
 \section*{Problem 8: Broadcast Times for a Tree}
 \Algorithm
 Let $M(u, v)$ be the maximum time needed for $u$ to broadcast message to a vertex on the subtree   
